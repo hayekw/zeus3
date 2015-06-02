@@ -125,12 +125,12 @@ public class TableInfoTab implements IsWidget {
 	public void load(TableModel t) {
 		getStore().clear();
 		if (t != null) {
-			store.add(new ModelPropertyModel("表名", t.getName()));
-			store.add(new ModelPropertyModel("所有者", t.getOwner()));
-			store.add(new ModelPropertyModel("创建时间", DateTimeFormat
+			store.add(new ModelPropertyModel("Table name", t.getName()));
+			store.add(new ModelPropertyModel("Owner", t.getOwner()));
+			store.add(new ModelPropertyModel("Begin time", DateTimeFormat
 					.getFormat("yyyy-MM-d HH:mm:ss").format(t.getCreateDate())
 					.toString()));
-			store.add(new ModelPropertyModel("路径", t.getPath()));
+			store.add(new ModelPropertyModel("Path", t.getPath()));
 			String inputFormat = t.getInputFormat();
 			if (inputFormat.equals("org.apache.hadoop.mapred.TextInputFormat")) {
 				inputFormat = "TextFile";
@@ -141,11 +141,11 @@ public class TableInfoTab implements IsWidget {
 					.equals("org.apache.hadoop.hive.ql.io.RCFileInputFormat")) {
 				inputFormat = "RCFile";
 			}
-			store.add(new ModelPropertyModel("存储格式", inputFormat));
-			store.add(new ModelPropertyModel("注释", t.getComment()));
+			store.add(new ModelPropertyModel("Input format", inputFormat));
+			store.add(new ModelPropertyModel("Description", t.getComment()));
 			char fieldDelim = t.getFieldDelim()==null? '\001':t.getFieldDelim().toCharArray()[0];
-			store.add(new ModelPropertyModel("列分割符", fieldDelim+"("+getUnicode(fieldDelim)+")"));
-			store.add(new ModelPropertyModel("公共表数据字典","请在代码中配置"));
+			store.add(new ModelPropertyModel("Field delimiter", fieldDelim+"("+getUnicode(fieldDelim)+")"));
+			store.add(new ModelPropertyModel("Common table dictionary","Please configure in code"));
 		}
 	}
 

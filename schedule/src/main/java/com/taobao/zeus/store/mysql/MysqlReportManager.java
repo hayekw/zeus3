@@ -11,11 +11,23 @@ import java.util.Map;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
+
+@SuppressWarnings("unchecked")
+@Repository(value = "reportManager")
+@Transactional
 public class MysqlReportManager extends HibernateDaoSupport{
 
+	@Autowired
+	public MysqlReportManager(SessionFactory sessionFactory){
+		super.setSessionFactory(sessionFactory);
+	}
 	/**
 	 * yyyyMMdd->{success:1,fail:2},{success:1,fail:2}
 	 * @param start
@@ -27,8 +39,7 @@ public class MysqlReportManager extends HibernateDaoSupport{
 		return (Map<String, Map<String, String>>) getHibernateTemplate().execute(new HibernateCallback() {
 			private SimpleDateFormat format=new SimpleDateFormat("yyyyMMdd");
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException  {
 				Map<String, Map<String, String>> result=new HashMap<String, Map<String,String>>();
 				
 				String success_sql="select count(*),h.gmt_create from zeus_job_history h " +
@@ -75,8 +86,7 @@ public class MysqlReportManager extends HibernateDaoSupport{
 	public List<Map<String, String>> ownerFailJobs(final Date date){
 		List<Map<String, String>> list=(List<Map<String, String>>) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException  {
 				List<Map<String, String>> result=new ArrayList<Map<String,String>>();
 				
 				String sql="select count(*) as cou,j.owner,u.name from zeus_job_history h " +
@@ -105,8 +115,7 @@ public class MysqlReportManager extends HibernateDaoSupport{
 		for(final Map<String, String> map:list){
 			getHibernateTemplate().execute(new HibernateCallback() {
 				@Override
-				public Object doInHibernate(Session session) throws HibernateException,
-						SQLException {
+				public Object doInHibernate(Session session) throws HibernateException {
 					String sql="select h.id,h.job_id,j.name from zeus_job_history h " +
 							"left join zeus_job j on h.job_id=j.id where h.status='failed' " +
 							"and h.trigger_type=1 and to_days(?) =to_days(h.gmt_create) and j.owner=?";

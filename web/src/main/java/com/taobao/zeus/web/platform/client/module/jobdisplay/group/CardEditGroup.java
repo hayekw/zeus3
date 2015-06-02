@@ -41,7 +41,7 @@ public class CardEditGroup extends CenterTemplate implements Refreshable<GroupMo
 	private TextArea configs;
 	private TextArea resources;
 	
-	private TextButton upload=new TextButton("上传资源文件", new SelectHandler() {
+	private TextButton upload=new TextButton("Upload resource files", new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			new FileUploadWidget("group", model.getId(),new UploadCallback() {
@@ -58,7 +58,7 @@ public class CardEditGroup extends CenterTemplate implements Refreshable<GroupMo
 			}).show();
 		}
 	});
-	private TextButton save=new TextButton("保存", new SelectHandler() {
+	private TextButton save=new TextButton("Save", new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			if(!resources.validate() || !configs.validate()){
@@ -95,16 +95,16 @@ public class CardEditGroup extends CenterTemplate implements Refreshable<GroupMo
 		centerContainer.setScrollMode(ScrollMode.AUTOY);
 		
 		FieldSet one=new FieldSet();
-		one.setHeadingText("基本信息");
+		one.setHeadingText("Basic information");
 		VerticalLayoutContainer p1 = new VerticalLayoutContainer();
-		p1.add(new FieldLabel(name, "名称"),new VerticalLayoutContainer.VerticalLayoutData(1, 1));
-		p1.add(new FieldLabel(desc, "描述"),new VerticalLayoutContainer.VerticalLayoutData(1, 1));
+		p1.add(new FieldLabel(name, "Name"),new VerticalLayoutContainer.VerticalLayoutData(1, 1));
+		p1.add(new FieldLabel(desc, "Description"),new VerticalLayoutContainer.VerticalLayoutData(1, 1));
 		one.add(p1);
 		
 		centerContainer.add(one,new MarginData(5));
 		
 		final FieldSet two=new FieldSet();
-		two.setHeadingText("配置项信息");
+		two.setHeadingText("Configuration item information");
 		configs=new TextArea();
 		configs.setResizable(TextAreaInputCell.Resizable.BOTH);
 		configs.addValidator(FormatUtil.propValidator);
@@ -115,7 +115,7 @@ public class CardEditGroup extends CenterTemplate implements Refreshable<GroupMo
 		centerContainer.add(two,new MarginData(5));
 		
 		final FieldSet three=new FieldSet();
-		three.setHeadingText("资源信息");
+		three.setHeadingText("Resource information");
 		resources=new TextArea();
 		resources.setResizable(Resizable.BOTH);
 		resources.setWidth(800);
@@ -126,7 +126,7 @@ public class CardEditGroup extends CenterTemplate implements Refreshable<GroupMo
 		
 		setCenter(centerContainer);
 		
-		addButton(new TextButton("返回", new SelectHandler() {
+		addButton(new TextButton("Cancel", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				presenter.display(presenter.getGroupModel());
 			}

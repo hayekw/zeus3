@@ -8,17 +8,25 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.taobao.zeus.model.DebugHistory;
 import com.taobao.zeus.model.JobStatus.Status;
 import com.taobao.zeus.store.DebugHistoryManager;
 import com.taobao.zeus.store.mysql.persistence.DebugHistoryPersistence;
 import com.taobao.zeus.store.mysql.tool.PersistenceAndBeanConvert;
-
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.SessionFactory;
+@Repository(value = "debugHistoryManager")
+@Transactional
 public class MysqlDebugHistoryManager extends HibernateDaoSupport implements DebugHistoryManager{
-
+	@Autowired
+	public MysqlDebugHistoryManager(SessionFactory sessionFactory) {
+		super.setSessionFactory(sessionFactory);
+	}
 	@Override
 	public DebugHistory addDebugHistory(DebugHistory history) {
 		DebugHistoryPersistence persist=PersistenceAndBeanConvert.convert(history);
@@ -38,8 +46,7 @@ public class MysqlDebugHistoryManager extends HibernateDaoSupport implements Deb
 	public List<DebugHistory> pagingList(final String fileId, final int start, final int limit) {
 		return (List<DebugHistory>) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("select id,fileId,startTime,endTime,executeHost,status,script,log from com.taobao.zeus.store.mysql.persistence.DebugHistoryPersistence" +
 						" where fileId=? order by id desc");
 				query.setParameter(0, Long.valueOf(fileId));
@@ -86,8 +93,7 @@ public class MysqlDebugHistoryManager extends HibernateDaoSupport implements Deb
 	public void updateDebugHistoryLog(final String id,final  String log) {
 		getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("update com.taobao.zeus.store.mysql.persistence.DebugHistoryPersistence set log=? where id=?");
 				query.setParameter(0, log); 
 				query.setParameter(1, Long.valueOf(id));

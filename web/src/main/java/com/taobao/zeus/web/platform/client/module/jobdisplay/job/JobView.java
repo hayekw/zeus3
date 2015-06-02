@@ -35,22 +35,22 @@ public class JobView extends CardLayoutContainer implements IsWidget{
 		setActiveWidget(editJob);
 		editJob.refresh(presenter.getJobModel());
 		editJob.getCenter().getElement().setScrollTop(0);
-		editJob.setHeadingText(getBaseTitle()+" > 编辑任务");
+		editJob.setHeadingText(getBaseTitle()+" > Edit job");
 	}
 	
 	public void displayHistory(){
 		setActiveWidget(history);
 		history.refresh(presenter.getJobModel());
-		history.setHeadingText(getBaseTitle()+" > 历史运行日志");
+		history.setHeadingText(getBaseTitle()+" > Running history");
 	}
 	
 	private String getBaseTitle(){
-		return "任务："+presenter.getJobModel().getName()+"("+presenter.getJobModel().getId()+")";
+		return "Job: "+presenter.getJobModel().getName()+"("+presenter.getJobModel().getId()+")";
 	}
 
 	public void displayDepGraph() {
 		setActiveWidget(depGraph);
-		depGraph.setHeadingText(getBaseTitle()+" > 依赖图");
+		depGraph.setHeadingText(getBaseTitle()+" > Dependency graph");
 		depGraph.refresh(presenter.getJobModel());
 	}
 }

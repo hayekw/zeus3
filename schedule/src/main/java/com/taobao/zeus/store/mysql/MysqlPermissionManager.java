@@ -11,8 +11,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.taobao.zeus.store.GroupBean;
 import com.taobao.zeus.store.GroupManager;
@@ -20,8 +20,17 @@ import com.taobao.zeus.store.JobBean;
 import com.taobao.zeus.store.PermissionManager;
 import com.taobao.zeus.store.Super;
 import com.taobao.zeus.store.mysql.persistence.PermissionPersistence;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.SessionFactory;
+@Repository(value = "permissionManager")
+@Transactional
 @SuppressWarnings("unchecked")
 public class MysqlPermissionManager extends HibernateDaoSupport implements PermissionManager{
+	@Autowired
+	public MysqlPermissionManager (SessionFactory sessionFactory) {
+		super.setSessionFactory(sessionFactory);
+	}
 	@Autowired
 	@Qualifier("groupManager")
 	private GroupManager groupManager;
@@ -50,8 +59,7 @@ public class MysqlPermissionManager extends HibernateDaoSupport implements Permi
 	
 	public List<String> getGroupAdmins(final String groupId){
 		return (List<String>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("select uid from com.taobao.zeus.store.mysql.persistence.PermissionPersistence where type=? and targetId=?");
 				query.setParameter(0, PermissionPersistence.GROUP_TYPE);
 				query.setParameter(1, Long.valueOf(groupId));
@@ -61,8 +69,7 @@ public class MysqlPermissionManager extends HibernateDaoSupport implements Permi
 	}
 	public List<String> getJobAdmins(final String jobId){
 		return (List<String>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("select uid from com.taobao.zeus.store.mysql.persistence.PermissionPersistence where type=? and targetId=?");
 				query.setParameter(0, PermissionPersistence.JOB_TYPE);
 				query.setParameter(1, Long.valueOf(jobId));
@@ -73,8 +80,7 @@ public class MysqlPermissionManager extends HibernateDaoSupport implements Permi
 	
 	private PermissionPersistence getGroupPermission(final String user,final String groupId){
 		List<PermissionPersistence> list=(List<PermissionPersistence>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.PermissionPersistence where type=? and uid=? and targetId=?");
 				query.setParameter(0,PermissionPersistence.GROUP_TYPE);
 				query.setParameter(1, user);
@@ -89,8 +95,7 @@ public class MysqlPermissionManager extends HibernateDaoSupport implements Permi
 	}
 	private PermissionPersistence getJobPermission(final String user,final String jobId){
 		List<PermissionPersistence> list=(List<PermissionPersistence>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.PermissionPersistence where type=? and uid=? and targetId=?");
 				query.setParameter(0,PermissionPersistence.JOB_TYPE);
 				query.setParameter(1, user);

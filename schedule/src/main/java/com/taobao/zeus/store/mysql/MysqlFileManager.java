@@ -8,17 +8,26 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.taobao.zeus.model.FileDescriptor;
 import com.taobao.zeus.store.FileManager;
 import com.taobao.zeus.store.mysql.persistence.FilePersistence;
 import com.taobao.zeus.store.mysql.tool.PersistenceAndBeanConvert;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.SessionFactory;
 
+@Repository(value = "fileManager")
+@Transactional
 public class MysqlFileManager extends HibernateDaoSupport implements
 		FileManager {
-
+	@Autowired
+	public MysqlFileManager(SessionFactory sessionFactory) {
+		super.setSessionFactory(sessionFactory);
+	}
 	@Override
 	public FileDescriptor addFile(String uid, String parentId, String name,
 			boolean folder) {
@@ -54,7 +63,7 @@ public class MysqlFileManager extends HibernateDaoSupport implements
 		List<FileDescriptor> list = (List<FileDescriptor>) getHibernateTemplate()
 				.execute(new HibernateCallback() {
 					public Object doInHibernate(Session session)
-							throws HibernateException, SQLException {
+							throws HibernateException {
 						Query query = session
 								.createQuery("from com.taobao.zeus.store.mysql.persistence.FilePersistence where parent=?");
 						query.setParameter(0, Long.valueOf(id));
@@ -75,7 +84,7 @@ public class MysqlFileManager extends HibernateDaoSupport implements
 		List<FilePersistence> list = (List<FilePersistence>) getHibernateTemplate()
 				.execute(new HibernateCallback() {
 					public Object doInHibernate(Session session)
-							throws HibernateException, SQLException {
+							throws HibernateException {
 						Query query = session
 								.createQuery("from com.taobao.zeus.store.mysql.persistence.FilePersistence where owner=? and parent=null");
 						query.setParameter(0, uid);

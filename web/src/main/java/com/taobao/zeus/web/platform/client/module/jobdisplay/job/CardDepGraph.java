@@ -26,7 +26,7 @@ public class CardDepGraph extends CenterTemplate implements Refreshable<JobModel
 	public CardDepGraph(JobPresenter p){
 		this.presenter=p;
 		
-		addButton(new TextButton("返回",new SelectHandler() {
+		addButton(new TextButton("Cancel",new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				presenter.display(presenter.getJobModel());
 			}
@@ -52,23 +52,23 @@ public class CardDepGraph extends CenterTemplate implements Refreshable<JobModel
 //		container.add(dependeeField);
 //		container.add(dependerField);
 		
-		container.add(new HTMLPanel("任务依赖图："));
+		container.add(new HTMLPanel("Job dependency graph："));
 		container.add(dependeeST);
-		container.add(new HTMLPanel("任务被依赖图："));
+		container.add(new HTMLPanel("Depending jobs graph："));
 		container.add(dependerST);
 		
 		setCenter(container);
 	}
 	@Override
 	public void refresh(JobModel t) {
-		dependeeST.mask("加载中，请稍等");
+		dependeeST.mask("Loading....Please be patient");
 		RPCS.getTreeService().getDependeeTreeJson(t.getId(), new AbstractAsyncCallback<String>() {
 			public void onSuccess(String result) {
 				dependeeST.loadData(result);
 				dependeeST.unmask();
 			}
 		});
-		dependerST.mask("加载中，请稍等");
+		dependerST.mask("Loading....Please be patient");
 		RPCS.getTreeService().getDependerTreeJson(t.getId(), new AbstractAsyncCallback<String>(){
 			public void onSuccess(String result) {
 				dependerST.loadData(result);

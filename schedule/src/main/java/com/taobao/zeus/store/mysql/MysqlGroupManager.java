@@ -16,8 +16,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.taobao.zeus.client.ZeusException;
 import com.taobao.zeus.model.GroupDescriptor;
@@ -39,10 +39,18 @@ import com.taobao.zeus.store.mysql.tool.GroupValidate;
 import com.taobao.zeus.store.mysql.tool.JobValidate;
 import com.taobao.zeus.store.mysql.tool.PersistenceAndBeanConvert;
 import com.taobao.zeus.util.Tuple;
-
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.SessionFactory;
+@Repository(value = "groupManager")
+@Transactional
 @SuppressWarnings("unchecked")
 public class MysqlGroupManager extends HibernateDaoSupport implements
 		GroupManager {
+	@Autowired
+	public MysqlGroupManager(SessionFactory sessionFactory) {
+		super.setSessionFactory(sessionFactory);
+	}
 	@Override
 	public void deleteGroup(String user, String groupId) throws ZeusException {
 		GroupBean group = getDownstreamGroupBean(groupId);
@@ -121,7 +129,7 @@ public class MysqlGroupManager extends HibernateDaoSupport implements
 	 */
 	@Override
 	public List<Tuple<JobDescriptor, JobStatus>> getChildrenJob(String groupId) {
-		List<JobPersistence> list = getHibernateTemplate().find(
+		List<JobPersistence> list = (List<JobPersistence>)getHibernateTemplate().find(
 				"from com.taobao.zeus.store.mysql.persistence.JobPersistence where groupId="
 						+ groupId);
 		List<Tuple<JobDescriptor, JobStatus>> result = new ArrayList<Tuple<JobDescriptor, JobStatus>>();
@@ -141,7 +149,7 @@ public class MysqlGroupManager extends HibernateDaoSupport implements
 	 */
 	@Override
 	public List<GroupDescriptor> getChildrenGroup(String groupId) {
-		List<GroupPersistence> list = getHibernateTemplate().find(
+		List<GroupPersistence> list = (List<GroupPersistence>)getHibernateTemplate().find(
 				"from com.taobao.zeus.store.mysql.persistence.GroupPersistence where parent="
 						+ groupId);
 		List<GroupDescriptor> result = new ArrayList<GroupDescriptor>();
@@ -204,7 +212,7 @@ public class MysqlGroupManager extends HibernateDaoSupport implements
 
 			@Override
 			public Object doInHibernate(Session session)
-					throws HibernateException, SQLException {
+					throws HibernateException {
 				Query query = session
 						.createQuery("from com.taobao.zeus.store.mysql.persistence.GroupPersistence g order by g.id asc");
 				query.setMaxResults(1);
@@ -375,7 +383,7 @@ public class MysqlGroupManager extends HibernateDaoSupport implements
 
 					@Override
 					public Object doInHibernate(Session session)
-							throws HibernateException, SQLException {
+							throws HibernateException {
 						if (jobIds.isEmpty()) {
 							return Collections.emptyList();
 						}
@@ -410,7 +418,7 @@ public class MysqlGroupManager extends HibernateDaoSupport implements
 				.execute(new HibernateCallback() {
 					@Override
 					public Object doInHibernate(Session session)
-							throws HibernateException, SQLException {
+							throws HibernateException {
 						if (jobIds.isEmpty()) {
 							return Collections.emptyList();
 						}
@@ -509,7 +517,7 @@ public class MysqlGroupManager extends HibernateDaoSupport implements
 		return (List<String>) getHibernateTemplate().execute(
 				new HibernateCallback() {
 					public Object doInHibernate(Session session)
-							throws HibernateException, SQLException {
+							throws HibernateException {
 						Query query = session
 								.createQuery("select host from com.taobao.zeus.store.mysql.persistence.Worker");
 						return query.list();

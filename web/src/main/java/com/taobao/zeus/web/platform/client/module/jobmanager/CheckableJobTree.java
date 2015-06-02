@@ -29,7 +29,7 @@ import com.taobao.zeus.web.platform.client.util.async.AbstractAsyncCallback;
 public class CheckableJobTree extends Window{
 	
 	public CheckableJobTree(){
-		setHeadingText("选择依赖任务(可以多选)");
+		setHeadingText("Select depending jobs(multiple)");
 		setModal(true);
 		setHeight(600);
 		setWidth(500);
@@ -167,12 +167,12 @@ public class CheckableJobTree extends Window{
 			}
 			
 		};
-		filter.setEmptyText("id 或者 名称 匹配搜索,使用空格匹配多个，使用单引号（如'123'）进行精确匹配");
+		filter.setEmptyText("id or name, multi-match can be done by use space to separate keywords, exact-match can be done by using keywords in single quote");
 		filter.bind(tree.getStore());
 		getLayoutContainer().add(filter,new VerticalLayoutContainer.VerticalLayoutData(1, 30, new Margins(4)));
 		getLayoutContainer().add(tree,new VerticalLayoutContainer.VerticalLayoutData(1, 1d, new Margins(4)));
 		
-		addButton(new TextButton("确定", new SelectHandler() {
+		addButton(new TextButton("Ok", new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
 				if(handler!=null){

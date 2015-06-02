@@ -6,7 +6,7 @@ import com.taobao.zeus.web.platform.client.widget.Shortcut;
 public class ScheduleShortcut extends Shortcut{
 
 	public ScheduleShortcut() {
-		super("schedule","调度中心");
+		super("schedule","Scheduling Center");
 		setIcon(ResourcesTool.iconResources.schedule());
 		
 	}

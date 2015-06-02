@@ -57,13 +57,13 @@ public class PartitionTab implements IsWidget {
 	public Widget asWidget() {
 	    if(grid==null){
     		ColumnConfig<PartitionModel, String> name = new ColumnConfig<PartitionModel, String>(
-    				props.name(), 100, "名称");
+    				props.name(), 100, "Name");
     		name.setCell(new TitledCell());
     		ColumnConfig<PartitionModel, String> path = new ColumnConfig<PartitionModel, String>(
-    				props.path(), 40, "路径");
+    				props.path(), 40, "Path");
     		path.setCell(new TitledCell());
     		ColumnConfig<PartitionModel, String> size = new ColumnConfig<PartitionModel, String>(
-    				props.size(), 60, "大小");
+    				props.size(), 60, "Size");
     		size.setCell(new TitledCell() {
     			@Override
     			public void render(com.google.gwt.cell.client.Cell.Context context,
@@ -150,7 +150,7 @@ public class PartitionTab implements IsWidget {
 	public void load(final TableModel t) {
 		if (t == null)
 			return;
-		grid.mask("加载中...");
+		grid.mask("Loading...");
 		tableService.getPartitions(t,
 				new AbstractAsyncCallback<List<PartitionModel>>() {
 

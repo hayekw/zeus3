@@ -7,7 +7,7 @@ public class ReportShortcut extends Shortcut{
 
 	
 	public ReportShortcut() {
-		super("report", "统计报表");
+		super("report", "Report");
 		setIcon(ResourcesTool.iconResources.report());
 	}
 

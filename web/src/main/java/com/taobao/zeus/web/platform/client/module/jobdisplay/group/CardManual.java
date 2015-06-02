@@ -50,8 +50,8 @@ public class CardManual extends CenterTemplate implements Refreshable<GroupModel
 		IdentityValueProvider<JobHistoryModel> identity = new IdentityValueProvider<JobHistoryModel>();
 		RowNumberer<JobHistoryModel> numberer = new RowNumberer<JobHistoryModel>(identity);
 		ColumnConfig<JobHistoryModel,String> jobId=new ColumnConfig<JobHistoryModel, String>(prop.jobId(), 30, "JobId");
-		ColumnConfig<JobHistoryModel,String> name=new ColumnConfig<JobHistoryModel, String>(prop.name(),100,"任务名称");
-		ColumnConfig<JobHistoryModel,String> owner=new ColumnConfig<JobHistoryModel,String>(prop.owner(),50,"所有人");
+		ColumnConfig<JobHistoryModel,String> name=new ColumnConfig<JobHistoryModel, String>(prop.name(),100,"Job name");
+		ColumnConfig<JobHistoryModel,String> owner=new ColumnConfig<JobHistoryModel,String>(prop.owner(),50,"Owner");
 		owner.setCell(new AbstractCell<String>(){
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					String value, SafeHtmlBuilder sb) {
@@ -69,9 +69,9 @@ public class CardManual extends CenterTemplate implements Refreshable<GroupModel
 				sb.appendHtmlConstant("<span title='"+value+"'>"+value+"</span>");
 			}
 		});
-		ColumnConfig<JobHistoryModel,Date> startTime=new ColumnConfig<JobHistoryModel, Date>(prop.startTime(),70,"开始时间");
+		ColumnConfig<JobHistoryModel,Date> startTime=new ColumnConfig<JobHistoryModel, Date>(prop.startTime(),70,"Start time");
 		startTime.setCell(new AbstractCell<Date>() {
-			private DateTimeFormat format=DateTimeFormat.getFormat("MM月dd日 HH:mm");
+			private DateTimeFormat format=DateTimeFormat.getFormat("MM-dd HH:mm");
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					Date value, SafeHtmlBuilder sb) {
 				if(value!=null){
@@ -79,15 +79,15 @@ public class CardManual extends CenterTemplate implements Refreshable<GroupModel
 				}
 			}
 		});
-		ColumnConfig<JobHistoryModel,String> executeHost=new ColumnConfig<JobHistoryModel, String>(prop.executeHost(),70,"执行服务器");
-		ColumnConfig<JobHistoryModel,String> triggerType=new ColumnConfig<JobHistoryModel, String>(prop.triggerType(),50,"触发类型");
+		ColumnConfig<JobHistoryModel,String> executeHost=new ColumnConfig<JobHistoryModel, String>(prop.executeHost(),70,"Server running on");
+		ColumnConfig<JobHistoryModel,String> triggerType=new ColumnConfig<JobHistoryModel, String>(prop.triggerType(),50,"Trigger type");
 		triggerType.setCell(new AbstractCell<String>() {
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					String value, SafeHtmlBuilder sb) {
 				sb.appendHtmlConstant(value);
 			}
 		});
-		ColumnConfig<JobHistoryModel,String> illustrate=new ColumnConfig<JobHistoryModel, String>(prop.illustrate(),80,"说明");
+		ColumnConfig<JobHistoryModel,String> illustrate=new ColumnConfig<JobHistoryModel, String>(prop.illustrate(),80,"Description");
 		illustrate.setCell(new AbstractCell<String>() {
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					String value, SafeHtmlBuilder sb) {
@@ -106,7 +106,7 @@ public class CardManual extends CenterTemplate implements Refreshable<GroupModel
 		operate.setCell(new AbstractCell<JobHistoryModel>("click") {
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					JobHistoryModel value, SafeHtmlBuilder sb) {
-				sb.appendHtmlConstant("<a href='javascript:void(0)'>查看日志</a>&nbsp;&nbsp;<a href='javascript:void(0)'>取消任务</a>");
+				sb.appendHtmlConstant("<a href='javascript:void(0)'>View log</a>&nbsp;&nbsp;<a href='javascript:void(0)'>Terminate job</a>");
 			}
 			@Override
 			public void onBrowserEvent(
@@ -119,21 +119,21 @@ public class CardManual extends CenterTemplate implements Refreshable<GroupModel
 					Element t=Element.as(eventTarget);
 					if( t instanceof AnchorElement){
 						AnchorElement ae=t.cast();
-						if("查看日志".equals(ae.getInnerText())){
+						if("View log".equals(ae.getInnerText())){
 							LogWindow win=new LogWindow();
 							win.refreshId(value.getJobId(),value.getId());
-						}else if("取消任务".equals(ae.getInnerText())){
-							ConfirmMessageBox box=new ConfirmMessageBox("取消任务", "你确认取消该任务吗?");
+						}else if("Terminate job".equals(ae.getInnerText())){
+							ConfirmMessageBox box=new ConfirmMessageBox("Terminate job", "Are you sure to terminate this job?");
 							box.addHideHandler(new HideHandler() {
 								public void onHide(HideEvent event) {
 									Dialog btn = (Dialog) event.getSource();
 									if(btn.getHideButton().getText().equalsIgnoreCase("yes")){
-										grid.mask("取消任务中");
+										grid.mask("Terminating job");
 										RPCS.getJobService().cancel(value.getId(),new AbstractAsyncCallback<Void>(){
 											public void onSuccess(Void result) {
 												refresh(presenter.getGroupModel());
 												grid.unmask();
-												Info.display("操作成功", "任务已经取消");
+												Info.display("Succeeded", "Job was terminiated successfully");
 											}
 											@Override
 											public void onFailure(Throwable caught) {
@@ -174,12 +174,12 @@ public class CardManual extends CenterTemplate implements Refreshable<GroupModel
 		
 		setCenter(grid);
 		
-		addButton(new TextButton("返回", new SelectHandler() {
+		addButton(new TextButton("Cancel", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				presenter.display(presenter.getGroupModel());
 			}
 		}));
-		addButton(new TextButton("刷新",new SelectHandler() {
+		addButton(new TextButton("Refresh",new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				refresh(presenter.getGroupModel());
 			}
@@ -187,7 +187,7 @@ public class CardManual extends CenterTemplate implements Refreshable<GroupModel
 	}
 	@Override
 	public void refresh(GroupModel groupModel) {
-		grid.mask("加载中，请稍候");
+		grid.mask("Loading....Please be patient");
 		RPCS.getJobService().getManualRunning(groupModel.getId(), new AbstractAsyncCallback<List<JobHistoryModel>>() {
 			public void onSuccess(List<JobHistoryModel> result) {
 				store.clear();

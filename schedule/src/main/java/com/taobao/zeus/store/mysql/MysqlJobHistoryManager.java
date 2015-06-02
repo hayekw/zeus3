@@ -15,8 +15,9 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.taobao.zeus.model.JobHistory;
 import com.taobao.zeus.model.JobStatus.Status;
@@ -25,16 +26,23 @@ import com.taobao.zeus.store.JobHistoryManager;
 import com.taobao.zeus.store.mysql.persistence.JobHistoryPersistence;
 import com.taobao.zeus.store.mysql.tool.PersistenceAndBeanConvert;
 import com.taobao.zeus.util.DateUtil;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.SessionFactory;
+@Repository(value = "jobHistoryManager")
+@Transactional
 @SuppressWarnings("unchecked")
 public class MysqlJobHistoryManager extends HibernateDaoSupport implements JobHistoryManager{
-
+	@Autowired
+	public MysqlJobHistoryManager(SessionFactory sessionFactory) {
+		super.setSessionFactory(sessionFactory);
+	}
 	@Override
 	public void updateJobHistoryLog(final String id, final String log) {
 		getHibernateTemplate().execute(new HibernateCallback() {
 			
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("update com.taobao.zeus.store.mysql.persistence.JobHistoryPersistence set log=? where id=?");
 				query.setParameter(0, log); 
 				query.setParameter(1, Long.valueOf(id));
@@ -69,8 +77,7 @@ public class MysqlJobHistoryManager extends HibernateDaoSupport implements JobHi
 	public List<JobHistory> pagingList(final String jobId,final int start,final int limit) {
 		return (List<JobHistory>) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				SQLQuery query=session.createSQLQuery("select id,job_id,start_time,end_time,execute_host,status,trigger_type,illustrate,operator,properties,statis_end_time,timezone,cycle from zeus_job_history" +
 						" where job_id=? order by id desc");
 				query.setParameter(0, Long.valueOf(jobId));
@@ -120,8 +127,7 @@ public class MysqlJobHistoryManager extends HibernateDaoSupport implements JobHi
 			return Collections.emptyMap();
 		}
 		final List<Long> ids=(List<Long>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				String sql="select max(id) as m_id,job_id  from zeus_job_history where job_id in (:idList) group by job_id";
 				SQLQuery query=session.createSQLQuery(sql);
 				query.setParameterList("idList", jobIds);
@@ -134,8 +140,7 @@ public class MysqlJobHistoryManager extends HibernateDaoSupport implements JobHi
 			}
 		});
 		List<JobHistory> list=(List<JobHistory>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				if(ids==null || ids.isEmpty()){
 					return Collections.emptyList();
 				}
@@ -173,8 +178,7 @@ public class MysqlJobHistoryManager extends HibernateDaoSupport implements JobHi
 	@Override
 	public List<JobHistory> findRecentRunningHistory() {
 		return (List<JobHistory>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				String sql="select id,job_id,start_time,end_time,execute_host,status,trigger_type,illustrate,operator,properties from zeus_job_history where start_time>?";
 				SQLQuery query=session.createSQLQuery(sql);
 				Calendar cal=Calendar.getInstance();

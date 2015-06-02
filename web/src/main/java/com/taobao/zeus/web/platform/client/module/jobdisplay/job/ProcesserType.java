@@ -97,7 +97,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		
 		public HiveP(){
 			put("id",HiveP.ID);
-			put("name", "Hive相关处理器");
+			put("name", "Hive related processor");
 		}
 		@Override
 		public String getJsonObject() {
@@ -156,7 +156,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		public static final String ID="download";
 		public DownloadP(){
 			put("id",DownloadP.ID);
-			put("name", "资源下载");
+			put("name", "Download resources");
 		}
 		@Override
 		public String getJsonObject() {
@@ -166,7 +166,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		}
 		@Override
 		public InfoConfig getInfoConfig() {
-			InfoConfig config=new DefaultInfoConfig(getName(), "Job任务在执行时将会进行下载资源文件操作");
+			InfoConfig config=new DefaultInfoConfig(getName(), "Resources will be downloaded when jobs are running");
 			return config;
 		}
 	}
@@ -177,7 +177,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		private String path;
 		public ZooKeeperP(){
 			put("id",ZooKeeperP.ID);
-			put("name", "ZK通知");
+			put("name", "ZK notification");
 		}
 		@Override
 		public String getJsonObject() {
@@ -196,7 +196,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		public InfoConfig getInfoConfig() {
 			StringBuffer sb=new StringBuffer();
 			if(getUseDefault()){
-				sb.append("使用Zeus默认ZK地址");
+				sb.append("Use default ZK address of zeus");
 			}else{
 				sb.append("host:"+getHost()+"<br/>");
 				sb.append("path:"+getPath()+"<br/>");
@@ -229,7 +229,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		public static final String ID="mail";
 		public MailP(){
 			put("id",MailP.ID);
-			put("name","邮件通知");
+			put("name","Email notification");
 		}
 		public String getTemplate(){
 			return get("template");
@@ -264,7 +264,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		public static final String ID="meta";
 		public MetaP(){
 			put("id",MetaP.ID);
-			put("name","淘宝Meta通知");
+			put("name","Taobao Meta notification");
 		}
 		@Override
 		public String getJsonObject() {
@@ -283,7 +283,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		public static final String ID="OutputClean";
 		public OutputCleanP(){
 			put("id",OutputCleanP.ID);
-			put("name","产出路径清理");
+			put("name","Clean output path");
 		}
 		public void setPath(final String path){
 			put("path",path);
@@ -309,7 +309,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		}
 		@Override
 		public InfoConfig getInfoConfig() {
-			return new DefaultInfoConfig(getName(), "路径："+getPath()+"<br/>删除时间："+getDays()+" 之前");
+			return new DefaultInfoConfig(getName(), "Path: "+getPath()+"<br/>Delete time: "+getDays()+" ago");
 		}
 		
 	}
@@ -317,7 +317,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		public static final String ID="OutputCheck";
 		public OutputCheckP(){
 			put("id",OutputCheckP.ID);
-			put("name","产出数据浮动检测");
+			put("name","Output data variation detection");
 		}
 		public void setPercent(final Integer percent){
 			put("percent",percent==null?null:percent.toString());
@@ -343,7 +343,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		}
 		@Override
 		public InfoConfig getInfoConfig() {
-			return new DefaultInfoConfig(getName(), "浮动百分比："+getPercent()+"<br/>路径："+getPath());
+			return new DefaultInfoConfig(getName(), "Variation percentage："+getPercent()+"<br/>Path:"+getPath());
 		}
 	}
 	
@@ -353,7 +353,7 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		private Map<String, String> kvConfig=new HashMap<String, String>();
 		public JobP(){
 			put("id",JobP.ID);
-			put("name","自定义Job处理");
+			put("name","Customize job processing");
 		}
 		@Override
 		public String getJsonObject() {
@@ -380,10 +380,10 @@ public abstract class ProcesserType extends HashMap<String, String>{
 		}
 		public void setJobId(final String jobId) {
 			this.jobId = jobId;
-			put("name","关联Job:"+jobId);
+			put("name","Link job:"+jobId);
 		}
 		public void setJobName(final String name){
-			put("name","关联Job:"+name);
+			put("name","Link job:"+name);
 		}
 		public Map<String, String> getKvConfig() {
 			return kvConfig;

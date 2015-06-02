@@ -63,7 +63,7 @@ import com.taobao.zeus.web.platform.client.util.async.AbstractAsyncCallback;
  */
 public class CardEditJob extends CenterTemplate implements
 		Refreshable<JobModel> {
-	private TextButton upload = new TextButton("上传资源文件", new SelectHandler() {
+	private TextButton upload = new TextButton("Upload resource file", new SelectHandler() {
 		@Override
 		public void onSelect(final SelectEvent event) {
 			new FileUploadWidget("job", presenter.getJobModel().getId(),
@@ -86,7 +86,7 @@ public class CardEditJob extends CenterTemplate implements
 	});
 
 	// 更新任务时，保存更新
-	private TextButton save = new TextButton("保存", new SelectHandler() {
+	private TextButton save = new TextButton("Save", new SelectHandler() {
 		@Override
 		public void onSelect(final SelectEvent event) {
 			if (!resources.validate() || !configs.validate()
@@ -255,7 +255,7 @@ public class CardEditJob extends CenterTemplate implements
 		centerContainer.setScrollMode(ScrollMode.AUTO);
 		setCenter(centerContainer);
 
-		addButton(new TextButton("返回", new SelectHandler() {
+		addButton(new TextButton("Cancel", new SelectHandler() {
 			@Override
 			public void onSelect(final SelectEvent event) {
 				presenter.display(presenter.getJobModel());
@@ -460,7 +460,7 @@ public class CardEditJob extends CenterTemplate implements
 	public FieldSet getBaseFieldSet() {
 		if (baseFieldSet == null) {
 			baseFieldSet = new FieldSet();
-			baseFieldSet.setHeadingText("基本信息");
+			baseFieldSet.setHeadingText("Basic information");
 			baseFieldSet.setHeight(150);
 
 			HorizontalLayoutContainer layoutContainer = new HorizontalLayoutContainer();
@@ -480,7 +480,7 @@ public class CardEditJob extends CenterTemplate implements
 
 			offField = new TextField();
 			offField.setWidth(150);
-			offField.setToolTip("单位分钟");
+			offField.setToolTip("minutes");
 
 			baseDesc = new TextArea();
 			baseDesc.setWidth(150);
@@ -634,10 +634,10 @@ public class CardEditJob extends CenterTemplate implements
 						}
 					});
 			Map<String, String> sameday = new HashMap<String, String>();
-			sameday.put("key", "同一天");
+			sameday.put("key", "same day");
 			sameday.put("value", "sameday");
 			Map<String, String> nolimit = new HashMap<String, String>();
-			nolimit.put("key", "无限制");
+			nolimit.put("key", "unlimited");
 			nolimit.put("value", " ");
 			cycleStore.add(nolimit);
 			cycleStore.add(sameday);
@@ -662,20 +662,20 @@ public class CardEditJob extends CenterTemplate implements
 			baseMain = new TextField();
 			baseMain.setWidth(150);
 
-			depCycleWapper = new FieldLabel(baseDepCycle, "依赖周期");
-			depJobsWapper = new FieldLabel(baseDepJobs, "依赖任务");
-			cronWapper = new FieldLabel(baseCron, "定时表达式");
-			tzWapper = new FieldLabel(tzField, "时区");
-			offWapper = new FieldLabel(offField, "启动延时");
-			cycleWapper = new FieldLabel(jobCycle, "任务周期");
-			mainWapper = new FieldLabel(baseMain, "Main类");
-			leftContainer.add(new FieldLabel(baseName, "名称"),
+			depCycleWapper = new FieldLabel(baseDepCycle, "Depending lifetime");
+			depJobsWapper = new FieldLabel(baseDepJobs, "Depending jobs");
+			cronWapper = new FieldLabel(baseCron, "Cron expression");
+			tzWapper = new FieldLabel(tzField, "Timezone");
+			offWapper = new FieldLabel(offField, "Start delay");
+			cycleWapper = new FieldLabel(jobCycle, "Job lifecycle");
+			mainWapper = new FieldLabel(baseMain, "Main class");
+			leftContainer.add(new FieldLabel(baseName, "Name"),
 					new VerticalLayoutData(1, -1));
 			leftContainer.add(tzWapper, new VerticalLayoutData(1, -1));
 			leftContainer.add(cycleWapper, new VerticalLayoutData(1, -1));
-			leftContainer.add(new FieldLabel(baseDesc, "描述"),
+			leftContainer.add(new FieldLabel(baseDesc, "Description"),
 					new VerticalLayoutData(1, -1));
-			rightContainer.add(new FieldLabel(baseScheduleType, "调度类型"),
+			rightContainer.add(new FieldLabel(baseScheduleType, "Scheduling type"),
 					new VerticalLayoutData(1, -1));
 			rightContainer.add(cronWapper, new VerticalLayoutData(1, -1));
 			rightContainer.add(depJobsWapper, new VerticalLayoutData(1, -1));
@@ -692,7 +692,7 @@ public class CardEditJob extends CenterTemplate implements
 		if (configFieldSet == null) {
 			configFieldSet = new FieldSet();
 			configFieldSet.setCollapsible(true);
-			configFieldSet.setHeadingText("配置项信息");
+			configFieldSet.setHeadingText("Configuration information");
 			configFieldSet.setWidth("96%");
 			configFieldSet.setResize(false);
 			configs = new TextArea();
@@ -707,7 +707,7 @@ public class CardEditJob extends CenterTemplate implements
 		if (resourceField == null) {
 			resourceField = new FieldSet();
 			resourceField.setCollapsible(true);
-			resourceField.setHeadingText("资源信息");
+			resourceField.setHeadingText("Resource information");
 			resourceField.setWidth("96%");
 			resourceField.setResize(false);
 			resources = new TextArea();
@@ -722,7 +722,7 @@ public class CardEditJob extends CenterTemplate implements
 		if (scriptFieldSet == null) {
 			scriptFieldSet = new FieldSet();
 			scriptFieldSet.setCollapsible(true);
-			scriptFieldSet.setHeadingText("脚本");
+			scriptFieldSet.setHeadingText("Script");
 			CodeMirrorConfig cmc = new CodeMirrorConfig();
 			cmc.readOnly = false;
 			script = new CodeMirror(cmc);

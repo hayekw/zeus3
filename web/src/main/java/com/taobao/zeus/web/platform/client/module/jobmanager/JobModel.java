@@ -44,16 +44,16 @@ public class JobModel implements Serializable {
 	private String jobCycle;
 	private String host;
 
-	public static final String MapReduce = "MapReduce程序";
-	public static final String SHELL = "shell 脚本";
-	public static final String HIVE = "hive 脚本";
+	public static final String MapReduce = "MapReduce Job";
+	public static final String SHELL = "shell script";
+	public static final String HIVE = "hive script";
 
-	public static final String INDEPEN_JOB = "定时调度";
-	public static final String DEPEND_JOB = "依赖调度";
-	public static final String CYCLE_JOB = "周期调度";
+	public static final String INDEPEN_JOB = "Independent job";
+	public static final String DEPEND_JOB = "Depending job";
+	public static final String CYCLE_JOB = "Repeat job";
 	
-	public static final String JOB_CYCLE_HOUR="小时任务";
-	public static final String JOB_CYCLE_DAY="天任务";
+	public static final String JOB_CYCLE_HOUR="Job in hours";
+	public static final String JOB_CYCLE_DAY="Job in days";
 
 	public JobModel copy() {
 		JobModel model = new JobModel();

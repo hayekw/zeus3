@@ -40,14 +40,14 @@ public class ZKProcesserWindow extends Window{
 	
 	private JobModel jobModel;
 	
-	private TextButton add=new TextButton("确定", new SelectHandler() {
+	private TextButton add=new TextButton("Ok", new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			if(formPanel.isValid()){
 				if(isOn()) {
-					zkBtn.setText("自定义ZK[开启]");
+					zkBtn.setText("Use ZK[Enable]");
 				}else{
-					zkBtn.setText("自定义ZK[关闭]");
+					zkBtn.setText("Use ZK[Disable]");
 				}
 				ZKProcesserWindow.this.hide();
 			}
@@ -67,7 +67,7 @@ public class ZKProcesserWindow extends Window{
 	public ZKProcesserWindow(TextButton zk){
 		setModal(true);
 		this.zkBtn = zk;
-		setHeadingText("ZooKeeper通知 配置");
+		setHeadingText("ZooKeeper alert configuration");
 		setSize("400", "200");
 		
 		formPanel=new FormPanel();
@@ -77,9 +77,9 @@ public class ZKProcesserWindow extends Window{
 		
 		zkType=new ToggleGroup();
 		useDefault=new Radio();
-		useDefault.setBoxLabel("关闭");
+		useDefault.setBoxLabel("Disable");
 		useCustom=new Radio();
-		useCustom.setBoxLabel("开启");
+		useCustom.setBoxLabel("Enable");
 		zkType.add(useDefault);
 		zkType.add(useCustom);
 		HorizontalPanel hp = new HorizontalPanel();
@@ -107,11 +107,11 @@ public class ZKProcesserWindow extends Window{
 					if(hostField.getValue()==null||hostField.getValue().isEmpty()) {
 						hostField.setValue("${instance.processer.zk.host}");
 					}
-					hostField.setToolTip("请在配置项中配合填写 instance.processer.zk.host");
+					hostField.setToolTip("Please give instance.processer.zk.host in configuration item");
 					if(pathField.getValue()==null||pathField.getValue().isEmpty()) {
 						pathField.setValue("${instance.processer.zk.path}");
 					}
-					pathField.setToolTip("请在配置项中配合填写 instance.processer.zk.path");
+					pathField.setToolTip("Please give instance.processer.zk.path in configuration item");
 					hostFieldWapper.show();
 					pathFieldWapper.show();
 					hostField.setAllowBlank(false);
@@ -130,14 +130,14 @@ public class ZKProcesserWindow extends Window{
 			public List<EditorError> validate(Editor<String> editor, String value) {
 				List<EditorError> list=new ArrayList<EditorError>();
 				if(value!=null && value.startsWith("/zeus/")){
-					list.add(new DefaultEditorError(editor, "不得将通知设定到其他Job任务节点上", value));
+					list.add(new DefaultEditorError(editor, "Can not set alert to other job nodes", value));
 				}
 				return list;
 			}
 		});
-		hostFieldWapper=new FieldLabel(hostField,"ZK服务器");
-		pathFieldWapper=new FieldLabel(pathField,"路径");
-		p.add(new FieldLabel(hp,"ZK类型"));
+		hostFieldWapper=new FieldLabel(hostField,"ZK Server");
+		pathFieldWapper=new FieldLabel(pathField,"Path");
+		p.add(new FieldLabel(hp,"ZK Type"));
 		p.add(hostFieldWapper);
 		p.add(pathFieldWapper);
 		
@@ -145,7 +145,7 @@ public class ZKProcesserWindow extends Window{
 		add(formPanel,new MarginData(5));
 		
 		addButton(add);
-		addButton(new TextButton("取消",new SelectHandler() {
+		addButton(new TextButton("Cancel",new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
 				ZKProcesserWindow.this.hide();

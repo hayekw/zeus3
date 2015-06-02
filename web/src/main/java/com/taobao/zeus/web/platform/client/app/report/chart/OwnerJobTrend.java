@@ -38,13 +38,13 @@ import com.taobao.zeus.web.platform.client.util.async.AbstractAsyncCallback;
 public class OwnerJobTrend implements IsWidget{
 
 	private DateField date;
-	private TextButton submit=new TextButton("查询",new SelectHandler(){
+	private TextButton submit=new TextButton("Search",new SelectHandler(){
 		public void onSelect(SelectEvent event) {
 			if(!date.validate()){
 				return;
 			}
 			RPCS.getReportService().ownerFailJobs(date.getValue(), new AbstractAsyncCallback<List<Map<String,String>>>() {
-				private DateTimeFormat format=DateTimeFormat.getFormat("yyyy年MM月dd日");
+				private DateTimeFormat format=DateTimeFormat.getFormat("yyyy-MM-dd");
 				public void onSuccess(final List<Map<String, String>> result) {
 					final String[] categories=new String[result.size()];
 					Number[] numbers=new Number[result.size()];
@@ -55,7 +55,7 @@ public class OwnerJobTrend implements IsWidget{
 					}
 					final Chart chart=new Chart();
 					chart.setType(Series.Type.COLUMN);
-					chart.setChartTitleText(format.format(date.getValue())+"责任人失败任务统计图");
+					chart.setChartTitleText(format.format(date.getValue())+" failures report");
 					chart.setColumnPlotOptions(new ColumnPlotOptions()
 						.setPointPadding(0.2).setBorderWidth(0))
 					.setLegend(new Legend()
@@ -77,7 +77,7 @@ public class OwnerJobTrend implements IsWidget{
 										break;
 									}
 								}
-								String value= toolTipData.getYAsLong()+"个任务<br/>";
+								String value= toolTipData.getYAsLong()+" job(s)<br/>";
 								int count=Integer.valueOf(result.get(index).get("count"));
 								if(count>0){
 									for(int i=0;i<count;i++){
@@ -90,8 +90,8 @@ public class OwnerJobTrend implements IsWidget{
 						}));
 					
 					chart.getXAxis().setCategories(categories);
-					chart.getYAxis().setAxisTitleText("失败任务数");
-					chart.addSeries(chart.createSeries().setName("失败的任务")
+					chart.getYAxis().setAxisTitleText("Number of failures");
+					chart.addSeries(chart.createSeries().setName("Failed jobs")
 							.setPoints(numbers));
 					
 					for(int i=0;i<container.getWidgetCount();i++){
@@ -113,7 +113,7 @@ public class OwnerJobTrend implements IsWidget{
 		date.setValue(new Date());
 		
 		HorizontalLayoutContainer form=new HorizontalLayoutContainer();
-		form.add(new FieldLabel(date,"日期"),new HorizontalLayoutData());
+		form.add(new FieldLabel(date,"Date"),new HorizontalLayoutData());
 		form.add(submit,new HorizontalLayoutData());
 		
 		container.add(form,new VerticalLayoutData(1,30));

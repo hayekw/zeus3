@@ -7,7 +7,7 @@ public class DocumentShortcut extends Shortcut{
 
 	
 	public DocumentShortcut() {
-		super("document","开发中心");
+		super("document","Cloud Team");
 		setIcon(ResourcesTool.iconResources.document());
 	}
 }

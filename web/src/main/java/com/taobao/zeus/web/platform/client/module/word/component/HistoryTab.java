@@ -214,7 +214,7 @@ public class HistoryTab extends ContentPanel {
 																loader.load();
 																grid.unmask();
 																Info.display(
-																		"操作成功",
+																		"Succeed",
 																		"本次调试已经取消");
 															}
 
@@ -230,7 +230,7 @@ public class HistoryTab extends ContentPanel {
 								}
 							});
 							box.show();
-						} else if ("查看日志".equals(ae.getInnerText())) {
+						} else if ("View log".equals(ae.getInnerText())) {
 							expander.toggleExpand(context.getIndex());
 						}
 					}

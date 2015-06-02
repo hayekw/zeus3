@@ -143,7 +143,7 @@ public class FormatUtil {
 					break;
 				}
 				if(!line.contains("=")){
-					EditorError ee=new DefaultEditorError(editor, "格式不正确", null);
+					EditorError ee=new DefaultEditorError(editor, "Incorrect format", null);
 					return Arrays.asList(ee);
 				}
 			}
@@ -168,11 +168,11 @@ public class FormatUtil {
 					String[] uri=vv[1].split(":");
 					if(!"name".equals(name[0]) || !"uri".equals(uri[0])
 							|| name.length<2 || uri.length<2){
-						EditorError ee=new DefaultEditorError(editor, "格式不正确", null);
+						EditorError ee=new DefaultEditorError(editor, "Incorrect format", null);
 						return Arrays.asList(ee);
 					}
 				}else{
-					EditorError ee=new DefaultEditorError(editor, "格式不正确", null);
+					EditorError ee=new DefaultEditorError(editor, "Incorrect format", null);
 					return Arrays.asList(ee);
 				}
 				

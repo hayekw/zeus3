@@ -79,7 +79,7 @@ public class CardHistory extends CenterTemplate implements
 			BorderLayoutData layoutData=new BorderLayoutData(140);
 			container.setSouthWidget(frame, layoutData);
 			setSize("700", "500");
-			setHeadingText("日志");
+			setHeadingText("Logs");
 			setMaximizable(true);
 			timer = new Timer() {
 				public void run() {
@@ -132,7 +132,7 @@ public class CardHistory extends CenterTemplate implements
 
 		public void refreshId(String jobId,String hisId) {
 			this.id = hisId;
-			setHeadingText("任务ID："+jobId+" 记录ID:" + id);
+			setHeadingText("Job ID："+jobId+" Record ID:" + id);
 			timer.run();
 			timer.scheduleRepeating(2000);
 			if (!isVisible()) {
@@ -150,10 +150,10 @@ public class CardHistory extends CenterTemplate implements
 		ColumnConfig<JobHistoryModel, String> jobId = new ColumnConfig<JobHistoryModel, String>(
 				prop.jobId(), 40, "JobId");
 		ColumnConfig<JobHistoryModel, Date> startTime = new ColumnConfig<JobHistoryModel, Date>(
-				prop.startTime(), 80, "开始时间");
+				prop.startTime(), 80, "Start time");
 		startTime.setCell(new AbstractCell<Date>() {
 			private DateTimeFormat format = DateTimeFormat
-					.getFormat("MM月dd日 HH:mm:ss");
+					.getFormat("MM-dd HH:mm:ss");
 
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					Date value, SafeHtmlBuilder sb) {
@@ -163,7 +163,7 @@ public class CardHistory extends CenterTemplate implements
 			}
 		});
 		ColumnConfig<JobHistoryModel, Date> endTime = new ColumnConfig<JobHistoryModel, Date>(
-				prop.endTime(), 80, "结束时间");
+				prop.endTime(), 80, "End time");
 		endTime.setCell(new AbstractCell<Date>() {
 			private DateTimeFormat format = DateTimeFormat
 					.getFormat("MM月dd日 HH:mm:ss");
@@ -176,13 +176,13 @@ public class CardHistory extends CenterTemplate implements
 			}
 		});
 		ColumnConfig<JobHistoryModel, String> executeHost = new ColumnConfig<JobHistoryModel, String>(
-				prop.executeHost(), 80, "执行服务器");
+				prop.executeHost(), 80, "Server running on");
 		ColumnConfig<JobHistoryModel, String> status = new ColumnConfig<JobHistoryModel, String>(
-				prop.status(), 50, "执行状态");
+				prop.status(), 50, "Status");
 		ColumnConfig<JobHistoryModel, String> triggerType = new ColumnConfig<JobHistoryModel, String>(
-				prop.triggerType(), 50, "触发类型");
+				prop.triggerType(), 50, "Trigger type");
 		ColumnConfig<JobHistoryModel, String> operator = new ColumnConfig<JobHistoryModel, String>(
-				prop.operator(), 80, "执行人");
+				prop.operator(), 80, "Job owner");
 		operator.setCell(new AbstractCell<String>() {
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					String value, SafeHtmlBuilder sb) {
@@ -191,7 +191,7 @@ public class CardHistory extends CenterTemplate implements
 			}
 		});
 		ColumnConfig<JobHistoryModel, String> illustrate = new ColumnConfig<JobHistoryModel, String>(
-				prop.illustrate(), 100, "说明");
+				prop.illustrate(), 100, "Description");
 		illustrate.setCell(new AbstractCell<String>() {
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					String value, SafeHtmlBuilder sb) {
@@ -200,11 +200,11 @@ public class CardHistory extends CenterTemplate implements
 			}
 		});
 		ColumnConfig<JobHistoryModel, String> statisEndTime = new ColumnConfig<JobHistoryModel, String>(
-				prop.statisEndTime(), 80, "统计时间");
+				prop.statisEndTime(), 80, "Report time");
 		ColumnConfig<JobHistoryModel, String> timezone = new ColumnConfig<JobHistoryModel, String>(
-				prop.timeZone(), 50, "时区");
+				prop.timeZone(), 50, "Timezone");
 		ColumnConfig<JobHistoryModel, String> cycle = new ColumnConfig<JobHistoryModel, String>(
-				prop.cycle(), 50, "任务周期");
+				prop.cycle(), 50, "Job lifecycle");
 		ColumnConfig<JobHistoryModel, JobHistoryModel> operate = new ColumnConfig<JobHistoryModel, JobHistoryModel>(
 				new ValueProvider<JobHistoryModel, JobHistoryModel>() {
 					public String getPath() {
@@ -218,15 +218,15 @@ public class CardHistory extends CenterTemplate implements
 					public void setValue(JobHistoryModel object,
 							JobHistoryModel value) {
 					}
-				}, 80, "操作");
+				}, 80, "Action");
 		operate.setCell(new AbstractCell<JobHistoryModel>("click") {
 			public void render(
 					final com.google.gwt.cell.client.Cell.Context context,
 					JobHistoryModel value, SafeHtmlBuilder sb) {
 				if ("running".equalsIgnoreCase(value.getStatus())) {
-					sb.appendHtmlConstant("<a href='javascript:void(0)'>查看日志</a>&nbsp;&nbsp;<a href='javascript:void(0)'>取消任务</a>");
+					sb.appendHtmlConstant("<a href='javascript:void(0)'>View log</a>&nbsp;&nbsp;<a href='javascript:void(0)'>Terminate job</a>");
 				} else {
-					sb.appendHtmlConstant("<a href='javascript:void(0)'>查看日志</a>");
+					sb.appendHtmlConstant("<a href='javascript:void(0)'>View log</a>");
 				}
 			}
 
@@ -243,18 +243,18 @@ public class CardHistory extends CenterTemplate implements
 					Element t = Element.as(eventTarget);
 					if (t instanceof AnchorElement) {
 						AnchorElement ae = t.cast();
-						if ("查看日志".equals(ae.getInnerText())) {
+						if ("View log".equals(ae.getInnerText())) {
 							LogWindow win = new LogWindow();
 							win.refreshId(value.getJobId(),value.getId());
-						} else if ("取消任务".equals(ae.getInnerText())) {
+						} else if ("Terminate job".equals(ae.getInnerText())) {
 							ConfirmMessageBox box = new ConfirmMessageBox(
-									"取消任务", "你确认取消该任务吗?");
+									"Terminate job", "Are you sure to terminate this job?");
 							box.addHideHandler(new HideHandler() {
 								public void onHide(HideEvent event) {
 									Dialog btn = (Dialog) event.getSource();
 									if (btn.getHideButton().getText()
 											.equalsIgnoreCase("yes")) {
-										grid.mask("取消任务中");
+										grid.mask("Terminating the job");
 										RPCS.getJobService()
 												.cancel(value.getId(),
 														new AbstractAsyncCallback<Void>() {
@@ -264,8 +264,8 @@ public class CardHistory extends CenterTemplate implements
 																		.getJobModel());
 																grid.unmask();
 																Info.display(
-																		"操作成功",
-																		"任务已经取消");
+																		"Succeed",
+																		"The job was terminated successfully");
 															}
 
 															@Override
@@ -327,13 +327,13 @@ public class CardHistory extends CenterTemplate implements
 
 		setCenter(con);
 
-		addButton(new TextButton("返回", new SelectHandler() {
+		addButton(new TextButton("Cancel", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				presenter.display(presenter.getJobModel());
 			}
 		}));
 
-		addButton(new TextButton("刷新", new SelectHandler() {
+		addButton(new TextButton("Refresh", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				refresh(presenter.getJobModel());
 			}

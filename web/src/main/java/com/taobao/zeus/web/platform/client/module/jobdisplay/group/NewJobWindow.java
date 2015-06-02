@@ -31,7 +31,7 @@ public class NewJobWindow extends Window{
 	
 	private GroupModel groupModel;
 	
-	private TextButton save=new TextButton("保存", new SelectHandler() {
+	private TextButton save=new TextButton("Save", new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			if(formPanel.isValid()){
@@ -58,7 +58,7 @@ public class NewJobWindow extends Window{
 		setHeight(150);
 		setWidth(350);
 		
-		setHeadingText(groupModel.getName()+" 下新建任务");
+		setHeadingText("Create jobs in " + groupModel.getName());
 		
 		formPanel=new FormPanel();
 		VerticalLayoutContainer p=new VerticalLayoutContainer();
@@ -66,7 +66,7 @@ public class NewJobWindow extends Window{
 		
 		name=new TextField();
 		name.setAllowBlank(false);
-		p.add(new FieldLabel(name, "任务名称"),new VerticalLayoutData(1,-1));
+		p.add(new FieldLabel(name, "Job name"),new VerticalLayoutData(1,-1));
 		
 		ListStore<Map<String, String>> jobTypeStore=new ListStore<Map<String, String>>(new ModelKeyProvider<Map<String, String>>() {
 			public String getKey(Map<String, String> item) {
@@ -95,7 +95,7 @@ public class NewJobWindow extends Window{
 		
 		jobType.setStore(jobTypeStore);
 		
-		p.add(new FieldLabel(jobType, "任务类型"),new VerticalLayoutData(1, -1));
+		p.add(new FieldLabel(jobType, "Job type"),new VerticalLayoutData(1, -1));
 		
 		add(formPanel);
 		addButton(save);

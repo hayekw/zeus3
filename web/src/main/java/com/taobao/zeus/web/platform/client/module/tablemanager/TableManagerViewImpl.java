@@ -143,7 +143,7 @@ public class TableManagerViewImpl implements TableManagerView {
 			commonGrid.setLoadMask(true);
 			commonGrid.getView().setForceFit(true);
 			commonGrid.getView().setAutoFill(true);
-			commonGrid.getView().setEmptyText("没有查询结果！");
+			commonGrid.getView().setEmptyText("No search result！");
 
 			final GridFilters<TableModel> filters = new GridFilters<TableModel>(
 					loader);
@@ -161,7 +161,7 @@ public class TableManagerViewImpl implements TableManagerView {
 			filters.addFilter(myFilter);
 			final TextField filterText = myFilter.getField();
 			filterText.setWidth(280);
-			filterText.setEmptyText("关键词用空格隔开,'*'代表任意一个或多个字符");
+			filterText.setEmptyText("keywords should be split by spaces,'*' stands for 0 or more characters");
 			commonTableContainer.add(filterText, new VerticalLayoutData(1, 30,
 					new Margins(3)));
 			GridSelectionModel<TableModel> gs = new GridSelectionModel<TableModel>();

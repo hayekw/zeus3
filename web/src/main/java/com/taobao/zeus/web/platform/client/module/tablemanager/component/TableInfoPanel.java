@@ -29,15 +29,15 @@ public class TableInfoPanel extends TabPanel {
 		this.presenter = c;
 		this.context = presenter.getPlatformContext();
 		setBodyBorder(false);
-		add(getTableInfoTab(), new TabItemConfig("基本信息"));
-		add(getColumnInfoTab(), new TabItemConfig("字段信息"));
-		add(getPtTab(), new TabItemConfig("分区信息"));
+		add(getTableInfoTab(), new TabItemConfig("Basic information"));
+		add(getColumnInfoTab(), new TabItemConfig("Field information"));
+		add(getPtTab(), new TabItemConfig("Partition information"));
 
 		addSelectionHandler(new SelectionHandler<Widget>() {
 
 			@Override
 			public void onSelection(SelectionEvent<Widget> event) {
-				if (getConfig(event.getSelectedItem()).getText().equals("分区信息")) {
+				if (getConfig(event.getSelectedItem()).getText().equals("Partition information")) {
 					if (isPartitionLoaded() == false) {
 						getPtTab().load(table);
 						setPartitionLoaded(true);

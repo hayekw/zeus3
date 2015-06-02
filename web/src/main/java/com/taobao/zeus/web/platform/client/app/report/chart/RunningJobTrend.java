@@ -39,23 +39,23 @@ public class RunningJobTrend implements IsWidget{
 
 	private DateField start;
 	private DateField end;
-	private TextButton submit=new TextButton("查询",new SelectHandler() {
+	private TextButton submit=new TextButton("Search",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			if(start.getValue()==null){
-				start.markInvalid("请正确填写");
+				start.markInvalid("Please correct");
 				return;
 			}
 			if(end.getValue()==null || end.getValue().after(new Date())){
-				end.markInvalid("请正确填写");
+				end.markInvalid("Please correct");
 				return;
 			}
 			if(start.getValue().after(end.getValue())){
-				start.markInvalid("开始日期必须小于截止日期");
+				start.markInvalid("Begin date must be earlier than end date");
 				return;
 			}
 			if(end.getValue().getTime()-start.getValue().getTime()>15*24*60*60*1000L){
-				start.markInvalid("开启截止区间太大，请设置在2周以内");
+				start.markInvalid("Date range is too big, should be less than 2 weeks");
 				return;
 			}
 			Date endDate=new Date(end.getValue().getTime());
@@ -76,7 +76,7 @@ public class RunningJobTrend implements IsWidget{
 					
 					final Chart chart=new Chart();
 					chart.setType(Series.Type.COLUMN);
-					chart.setChartTitleText("运行任务趋势图");
+					chart.setChartTitleText("Trend of running jobs");
 					chart.setColumnPlotOptions(new ColumnPlotOptions()
 						.setPointPadding(0.2).setBorderWidth(0))
 					.setLegend(new Legend()
@@ -97,10 +97,10 @@ public class RunningJobTrend implements IsWidget{
 						}));
 					
 					chart.getXAxis().setCategories(categories);
-					chart.getYAxis().setAxisTitleText("数量");
-					chart.addSeries(chart.createSeries().setName("成功的任务")
+					chart.getYAxis().setAxisTitleText("Number");
+					chart.addSeries(chart.createSeries().setName("Successes")
 							.setPoints(successNum));
-					chart.addSeries(chart.createSeries().setName("失败的任务")
+					chart.addSeries(chart.createSeries().setName("Failures")
 							.setPoints(failNum));
 					
 					for(int i=0;i<container.getWidgetCount();i++){
@@ -125,8 +125,8 @@ public class RunningJobTrend implements IsWidget{
 		end.setEditable(false);
 		end.setValue(new Date());
 		HorizontalLayoutContainer form=new HorizontalLayoutContainer();
-		form.add(new FieldLabel(start, "起始日期"),new HorizontalLayoutData(0.3,1));
-		form.add(new FieldLabel(end,"截止日期"),new HorizontalLayoutData(0.3, 1));
+		form.add(new FieldLabel(start, "Begin date"),new HorizontalLayoutData(0.3,1));
+		form.add(new FieldLabel(end,"End date"),new HorizontalLayoutData(0.3, 1));
 		form.add(submit,new HorizontalLayoutData(-1,-1));
 		
 		container.add(form,new VerticalLayoutData(1, 30));

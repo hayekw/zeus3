@@ -94,7 +94,7 @@ public class JobTree extends ContentPanel{
 					String name="";
 					name+=object.getName()+"("+object.getId()+")";
 					if(object.isFollow()){
-						name+="(关注)" ;
+						name+="(Watch)" ;
 					}
 					return name;
 				}
@@ -129,7 +129,7 @@ public class JobTree extends ContentPanel{
 				}
 			});
 			Menu menu=new Menu();
-			final MenuItem follow = new MenuItem("关注(接收报警)",
+			final MenuItem follow = new MenuItem("Watch(Receive alerts)",
 					new SelectionHandler<MenuItem>() {
 						@Override
 						public void onSelection(SelectionEvent<MenuItem> event) {
@@ -146,12 +146,12 @@ public class JobTree extends ContentPanel{
 										public void onSuccess(Void result) {
 											model.setFollow(true);
 											tree.refresh(model);
-											Info.display("成功", "关注成功");
+											Info.display("Succeeded", "You are watcher for this job");
 										}
 									});
 								}
 					});
-			final MenuItem unfollow = new MenuItem("取消关注",
+			final MenuItem unfollow = new MenuItem("Unwatch",
 					new SelectionHandler<MenuItem>() {
 						@Override
 						public void onSelection(SelectionEvent<MenuItem> event) {
@@ -169,7 +169,7 @@ public class JobTree extends ContentPanel{
 										public void onSuccess(Void result) {
 											model.setFollow(false);
 											tree.refresh(model);
-											Info.display("成功", "取消关注成功");
+											Info.display("Succeeded", "You are not watcher any more");
 										}
 									});
 						}
@@ -238,7 +238,7 @@ public class JobTree extends ContentPanel{
 					super.applyFilters(store);
 				}
 			};
-			filter.setEmptyText("id 或者 名称 匹配搜索,使用空格可匹配多个");
+			filter.setEmptyText("id or name, multiple values can be matched if split by space.");
 			filter.bind(tree.getStore());
 			getContainer().add(filter,new VerticalLayoutContainer.VerticalLayoutData(1, 30, new Margins(4)));
 			getContainer().add(tree,new VerticalLayoutContainer.VerticalLayoutData(1, 1d, new Margins(4)));
@@ -310,17 +310,17 @@ public class JobTree extends ContentPanel{
 			final GroupJobTreeModel sourceItem=source.getSelect().getData();
 			if(sourceItem.isGroup()){
 				if(!activeItem.getModel().isDirectory()){
-					Info.display("失败", "非法的操作");
+					Info.display("Failed", "Illegal operation");
 					return;
 				}
 			}else{
 				if(activeItem.getModel().isDirectory()){
-					Info.display("失败", "非法的操作");
+					Info.display("Failed", "Illegal operation");
 					return;
 				}
 			}
 			final JobDropTarget targetThis=this;
-			ConfirmMessageBox confirm=new ConfirmMessageBox("警告", "迁移组/任务将会产生一定的风险，请确认:<br/>1.本次迁移造成的继承配置项改变，不影响任务正常运行.<br/>2.本次迁移造成的继承资源改变，不影响任务正常运行");
+			ConfirmMessageBox confirm=new ConfirmMessageBox("Warning", "It's dangerous to move groups/jobs, please confirm that:<br/>1. Configuration changes caused by moving groups/jobs will not affect running jobs.<br/>2.Inheriting resource changes cause by moving groups/jobs will not affect running jobs");
 			confirm.addHideHandler(new HideHandler() {
 				public void onHide(HideEvent he) {
 					Dialog dialog=(Dialog) he.getSource();

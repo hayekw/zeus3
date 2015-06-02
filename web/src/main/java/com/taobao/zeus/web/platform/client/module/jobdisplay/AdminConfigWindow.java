@@ -34,14 +34,14 @@ public class AdminConfigWindow extends Window{
 	private List<ZUser> admins=new ArrayList<ZUser>();
 	private List<ZUser> allUsers=new ArrayList<ZUser>();
 	private HTMLPanel label=new HTMLPanel("");
-	private TextButton add=new TextButton("添加管理员", new SelectHandler() {
+	private TextButton add=new TextButton("Create new admin", new SelectHandler() {
 		private ListStore<Map<String, String>> store=new ListStore<Map<String, String>>(new ModelKeyProvider<Map<String, String>>() {
 			public String getKey(Map<String, String> item) {
 				return item.get("name")+"("+item.get("uid")+")";
 			}
 		});
 		private ComboBox<Map<String, String>> combo;
-		private TextButton submit=new TextButton("添加", new SelectHandler() {
+		private TextButton submit=new TextButton("Create", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				Map<String, String> md=combo.getValue();
 				if(combo.validate() && md!=null){
@@ -49,7 +49,7 @@ public class AdminConfigWindow extends Window{
 						RPCS.getJobService().addJobAdmin(jobPresenter.getJobModel().getId(), md.get("uid"), new AbstractAsyncCallback<Void>() {
 							public void onSuccess(Void result) {
 								win.hide();
-								Info.display("成功", "添加管理员成功");
+								Info.display("Succeeded", "New admin was created successfully");
 								AdminConfigWindow.this.refresh();
 							}
 						});
@@ -57,7 +57,7 @@ public class AdminConfigWindow extends Window{
 						RPCS.getGroupService().addGroupAdmin(groupPresenter.getGroupModel().getId(), md.get("uid"), new AbstractAsyncCallback<Void>() {
 							public void onSuccess(Void result) {
 								win.hide();
-								Info.display("成功","添加管理员成功");
+								Info.display("Succeeded","New admin was created successfully");
 								AdminConfigWindow.this.refresh();
 							}
 						});
@@ -67,7 +67,7 @@ public class AdminConfigWindow extends Window{
 		});
 		private Window win=new Window();
 		{
-			win.setHeadingText("添加管理员");
+			win.setHeadingText("Create new admin");
 			win.setSize("350", "100");
 			win.setModal(true);
 			combo=new ComboBox<Map<String, String>>(store,new LabelProvider<Map<String, String>>() {
@@ -78,7 +78,7 @@ public class AdminConfigWindow extends Window{
 			combo.setForceSelection(true);
 			combo.setTriggerAction(TriggerAction.QUERY);
 			combo.setStore(store);
-			win.add(new FieldLabel(combo, "选择用户"));
+			win.add(new FieldLabel(combo, "Select an account"));
 			win.addButton(submit);
 		}
 		public void onSelect(SelectEvent event) {
@@ -92,24 +92,24 @@ public class AdminConfigWindow extends Window{
 			win.show();
 		}
 	});
-	private TextButton remove=new TextButton("删除管理员", new SelectHandler() {
+	private TextButton remove=new TextButton("Delete admin", new SelectHandler() {
 		private ComboBox<Map<String, String>> combo;
 		private ListStore<Map<String, String>> store=new ListStore<Map<String, String>>(new ModelKeyProvider<Map<String, String>>() {
 			public String getKey(Map<String, String> item) {
 				return item.get("uid");
 			}
 		});
-		private TextButton submit=new TextButton("删除", new SelectHandler() {
+		private TextButton submit=new TextButton("Delete", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				Map<String, String> md=combo.getValue();
 				if(md==null){
-					combo.markInvalid("必填");
+					combo.markInvalid("Mandatory");
 				}else{
 					if(jobPresenter!=null){
 						RPCS.getJobService().removeJobAdmin(jobPresenter.getJobModel().getId(), md.get("uid"), new AbstractAsyncCallback<Void>() {
 							public void onSuccess(Void result) {
 								win.hide();
-								Info.display("成功", "删除管理员成功");
+								Info.display("Succeeded", "Admin was deleted successfully");
 								AdminConfigWindow.this.refresh();
 							}
 						});
@@ -117,7 +117,7 @@ public class AdminConfigWindow extends Window{
 						RPCS.getGroupService().removeGroupAdmin(groupPresenter.getGroupModel().getId(), md.get("uid"), new AbstractAsyncCallback<Void>() {
 							public void onSuccess(Void result) {
 								win.hide();
-								Info.display("成功","删除管理员成功");
+								Info.display("Succeeded", "Admin was deleted successfully");
 								AdminConfigWindow.this.refresh();
 							}
 						});
@@ -127,7 +127,7 @@ public class AdminConfigWindow extends Window{
 		});
 		private Window win=new Window();
 		{
-			win.setHeadingText("删除管理员");
+			win.setHeadingText("Delete admin");
 			win.setSize("350", "100");
 			win.setModal(true);
 			combo=new ComboBox<Map<String, String>>(store,new LabelProvider<Map<String, String>>() {
@@ -138,7 +138,7 @@ public class AdminConfigWindow extends Window{
 			combo.setTriggerAction(TriggerAction.ALL);
 			combo.setEditable(false);
 			combo.setStore(store);
-			win.add(new FieldLabel(combo, "选择用户"));
+			win.add(new FieldLabel(combo, "Select an account"));
 			win.addButton(submit);
 		}
 		public void onSelect(SelectEvent event) {
@@ -153,14 +153,14 @@ public class AdminConfigWindow extends Window{
 		}
 	});
 	
-	private TextButton transfer=new TextButton("转让所有权", new SelectHandler() {
+	private TextButton transfer=new TextButton("Transfer ownership", new SelectHandler() {
 		private ListStore<Map<String, String>> store=new ListStore<Map<String, String>>(new ModelKeyProvider<Map<String, String>>() {
 			public String getKey(Map<String, String> item) {
 				return item.get("name");
 			}
 		});
 		private ComboBox<Map<String, String>> combo;
-		private TextButton submit=new TextButton("转让", new SelectHandler() {
+		private TextButton submit=new TextButton("Transfer", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				Map<String, String> md=combo.getValue();
 				if(combo.validate() && md!=null){
@@ -168,7 +168,7 @@ public class AdminConfigWindow extends Window{
 						RPCS.getJobService().transferOwner(jobPresenter.getJobModel().getId(), md.get("uid"), new AbstractAsyncCallback<Void>() {
 							public void onSuccess(Void result) {
 								win.hide();
-								Info.display("成功", "转让所有权成功");
+								Info.display("Succeeded", "Ownership was transferred successfully");
 								
 								AdminConfigWindow.this.refresh();
 							}
@@ -177,7 +177,7 @@ public class AdminConfigWindow extends Window{
 						RPCS.getGroupService().transferOwner(groupPresenter.getGroupModel().getId(), md.get("uid"), new AbstractAsyncCallback<Void>() {
 							public void onSuccess(Void result) {
 								win.hide();
-								Info.display("成功","转让所有权成功");
+								Info.display("Succeeded", "Ownership was transferred successfully");
 								AdminConfigWindow.this.refresh();
 							}
 						});
@@ -187,7 +187,7 @@ public class AdminConfigWindow extends Window{
 		});
 		private Window win=new Window();
 		{
-			win.setHeadingText("转让所有权");
+			win.setHeadingText("Transfer ownership");
 			win.setSize("350", "100");
 			win.setModal(true);
 			combo=new ComboBox<Map<String, String>>(store,new LabelProvider<Map<String, String>>() {
@@ -198,7 +198,7 @@ public class AdminConfigWindow extends Window{
 			combo.setForceSelection(true);
 			combo.setTriggerAction(TriggerAction.QUERY);
 			combo.setStore(store);
-			win.add(new FieldLabel(combo, "选择用户"));
+			win.add(new FieldLabel(combo, "Select an account"));
 			win.addButton(submit);
 		}
 		public void onSelect(SelectEvent event) {
@@ -213,7 +213,7 @@ public class AdminConfigWindow extends Window{
 		}
 	});
 	private AdminConfigWindow(){
-		setHeadingText("管理员配置");
+		setHeadingText("Admin configuration");
 		setModal(true);
 		setSize("400", "250");
 		add(label);

@@ -43,7 +43,7 @@ public class ReportViewImpl implements ReportView{
 		allBtnContainer.setVBoxLayoutAlign(VBoxLayoutAlign.STRETCH);
 		BoxLayoutData vBoxData = new BoxLayoutData(new Margins(5, 5, 5, 5));
 		ToggleGroup tg=new ToggleGroup();
-		ToggleButton runningTrend=new ToggleButton("每日失败任务趋势");
+		ToggleButton runningTrend=new ToggleButton("Trend of daily failures");
 		runningTrend.setAllowDepress(false);
 		runningTrend.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			private RunningJobTrend trend=new RunningJobTrend();
@@ -56,7 +56,7 @@ public class ReportViewImpl implements ReportView{
 				}
 			}
 		});
-		ToggleButton ownerTrend=new ToggleButton("负责人失败任务趋势");
+		ToggleButton ownerTrend=new ToggleButton("Trend of failures' owner");
 		ownerTrend.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			private OwnerJobTrend trend=new OwnerJobTrend();
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -75,7 +75,7 @@ public class ReportViewImpl implements ReportView{
 		allBtnContainer.add(ownerTrend,vBoxData);
 		allContainer.setWestWidget(allBtnContainer,new BorderLayoutData(300));
 		allContainer.setCenterWidget(allChartContainer);
-		panel.add(allContainer, new TabItemConfig("统计报表", false));
+		panel.add(allContainer, new TabItemConfig("Report", false));
 		
 	}
 	@Override

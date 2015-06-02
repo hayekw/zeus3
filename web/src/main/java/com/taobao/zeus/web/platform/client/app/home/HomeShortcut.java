@@ -6,7 +6,7 @@ import com.taobao.zeus.web.platform.client.widget.Shortcut;
 public class HomeShortcut extends Shortcut{
 
 	public HomeShortcut(){
-		super("welcome", "首页");
+		super("welcome", "Home Page");
 		setIcon(ResourcesTool.iconResources.home());
 	}
 

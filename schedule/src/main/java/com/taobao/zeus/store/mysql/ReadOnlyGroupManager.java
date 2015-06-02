@@ -19,10 +19,12 @@ import java.util.concurrent.TimeoutException;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.taobao.zeus.client.ZeusException;
 import com.taobao.zeus.model.GroupDescriptor;
@@ -40,6 +42,13 @@ import com.taobao.zeus.store.mysql.persistence.Worker;
 import com.taobao.zeus.store.mysql.tool.Judge;
 import com.taobao.zeus.store.mysql.tool.PersistenceAndBeanConvert;
 import com.taobao.zeus.util.Tuple;
+import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
+
+@SuppressWarnings("unchecked")
+@Repository(value = "readOnlyGroupManager")
+@Transactional
 /**
  * 性能优化，防止每次都递归去查询mysql
  * @author zhoufang
@@ -54,17 +63,24 @@ public class ReadOnlyGroupManager extends HibernateDaoSupport{
 	
 	private Judge ignoreContentJobJudge=new Judge();
 	private Judge ignoreContentGroupJudge=new Judge();
-	
+
+	@Autowired
 	private GroupManager groupManager;
+
 	public void setGroupManager(GroupManager groupManager) {
 		this.groupManager = groupManager;
 	}
+
 	/**完整的globe GroupBean*/
 	private GroupBean globe;
 	
 	private GroupBean ignoreGlobe;
 	
 	private static final ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(20);
+	@Autowired
+	public ReadOnlyGroupManager(SessionFactory sessionFactory){
+		super.setSessionFactory(sessionFactory);
+	}
 	/**
 	 * Jobs或者Groups是否有变化，忽略脚本内容的改变(保证树形结构不变即可)
 	 * @return
@@ -80,8 +96,7 @@ public class ReadOnlyGroupManager extends HibernateDaoSupport{
 		Judge jobrealtime=null;
 		jobrealtime=(Judge) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Object[] o=(Object[]) session.createSQLQuery("select count(*),max(id),max(gmt_modified) from zeus_job").uniqueResult();
 				if(o!=null){
 					Judge j=new Judge();
@@ -98,8 +113,7 @@ public class ReadOnlyGroupManager extends HibernateDaoSupport{
 		List<JobDescriptor> changedJobs;
 		changedJobs=(List<JobDescriptor>) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("select id,groupId from com.taobao.zeus.store.mysql.persistence.JobPersistence where gmt_modified>?");
 				query.setDate(0, ignoreContentJobJudge.lastModified);
 				List<Object[]> list=query.list();
@@ -130,8 +144,7 @@ public class ReadOnlyGroupManager extends HibernateDaoSupport{
 		Judge grouprealtime=null;
 		grouprealtime=(Judge) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Object[] o=(Object[]) session.createSQLQuery("select count(*),max(id),max(gmt_modified) from zeus_group").uniqueResult();
 				if(o!=null){
 					Judge j=new Judge();
@@ -149,8 +162,7 @@ public class ReadOnlyGroupManager extends HibernateDaoSupport{
 		List<GroupDescriptor> changedGroups=null;
 		changedGroups=(List<GroupDescriptor>) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.GroupPersistence where gmt_modified>?");
 				query.setDate(0, ignoreContentGroupJudge.lastModified);
 				List<GroupPersistence> list=query.list();
@@ -238,8 +250,7 @@ public class ReadOnlyGroupManager extends HibernateDaoSupport{
 		boolean jobChanged;
 		Judge jobrealtime=(Judge) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Object[] o=(Object[]) session.createSQLQuery("select count(*),max(id),max(gmt_modified) from zeus_job").uniqueResult();
 				if(o!=null){
 					Judge j=new Judge();
@@ -264,8 +275,7 @@ public class ReadOnlyGroupManager extends HibernateDaoSupport{
 		boolean groupChanged;
 		Judge grouprealtime=(Judge) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Object[] o=(Object[]) session.createSQLQuery("select count(*),max(id),max(gmt_modified) from zeus_group").uniqueResult();
 				if(o!=null){
 					Judge j=new Judge();

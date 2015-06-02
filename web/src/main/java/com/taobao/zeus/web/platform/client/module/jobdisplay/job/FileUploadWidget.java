@@ -21,7 +21,7 @@ public class FileUploadWidget extends Window {
 		this.callback=callback;
 		setModal(true);
 		setSize("400", "150");
-		setHeadingText("上传资源文件");
+		setHeadingText("Upload resouce file");
 		
 		FramedPanel fp=new FramedPanel();
 		fp.setHeaderVisible(false);
@@ -39,16 +39,16 @@ public class FileUploadWidget extends Window {
 		file = new FileUploadField();
 		file.setAllowBlank(false);
 		file.setName("uploadedfile");
-		panel.add(new FieldLabel(file,"选择文件"));
+		panel.add(new FieldLabel(file,"Choose file"));
 
-		TextButton btn = new TextButton("重置",new SelectHandler() {
+		TextButton btn = new TextButton("Reset",new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				panel.reset();
 			}
 		});
 		fp.addButton(btn);
 
-		btn = new TextButton("上传",new SelectHandler() {
+		btn = new TextButton("Upload",new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				if (panel.isValid()) {
 					panel.submit();
@@ -74,7 +74,7 @@ public class FileUploadWidget extends Window {
 					}
 					FileUploadWidget.this.hide();
 				}else{
-					AlertMessageBox alert=new AlertMessageBox("上传失败", html);
+					AlertMessageBox alert=new AlertMessageBox("Failed", html);
 					alert.show();
 				}
 			}

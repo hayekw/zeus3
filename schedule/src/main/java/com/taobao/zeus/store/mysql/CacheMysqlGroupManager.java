@@ -11,8 +11,8 @@ import java.util.Map;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.taobao.zeus.client.ZeusException;
 import com.taobao.zeus.model.GroupDescriptor;
@@ -40,8 +40,7 @@ public class CacheMysqlGroupManager extends HibernateDaoSupport implements Group
 	private Map<String, JobPersistence> getCacheJobs(){
 		Judge realtime=(Judge) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Object[] o=(Object[]) session.createSQLQuery("select count(*),max(id),max(gmt_modified) from zeus_job").uniqueResult();
 				if(o!=null){
 					Judge j=new Judge();
@@ -59,7 +58,7 @@ public class CacheMysqlGroupManager extends HibernateDaoSupport implements Group
 			jobjudge.stamp=new Date();
 			return cacheJobMap;
 		}else{
-			List<JobPersistence> list=getHibernateTemplate().find("from com.taobao.zeus.store.mysql.persistence.JobPersistence");
+			List<JobPersistence> list=(List<JobPersistence>)getHibernateTemplate().find("from com.taobao.zeus.store.mysql.persistence.JobPersistence");
 			Map<String, JobPersistence> newmap=new HashMap<String, JobPersistence>();
 			for(JobPersistence p:list){
 				newmap.put(p.getId().toString(), p);
@@ -72,8 +71,7 @@ public class CacheMysqlGroupManager extends HibernateDaoSupport implements Group
 	private Map<String, GroupPersistence> getCacheGroups(){
 		Judge realtime=(Judge) getHibernateTemplate().execute(new HibernateCallback() {
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Object[] o=(Object[]) session.createSQLQuery("select count(*),max(id),max(gmt_modified) from zeus_group").uniqueResult();
 				if(o!=null){
 					Judge j=new Judge();
@@ -90,7 +88,7 @@ public class CacheMysqlGroupManager extends HibernateDaoSupport implements Group
 			groupjudge.stamp=new Date();
 			return cacheGroupMap;
 		}else{
-			List<GroupPersistence> list=getHibernateTemplate().find("from com.taobao.zeus.store.mysql.persistence.GroupPersistence");
+			List<GroupPersistence> list=(List<GroupPersistence>)getHibernateTemplate().find("from com.taobao.zeus.store.mysql.persistence.GroupPersistence");
 			Map<String, GroupPersistence> newmap=new HashMap<String, GroupPersistence>();
 			for(GroupPersistence p:list){
 				newmap.put(p.getId().toString(),p);

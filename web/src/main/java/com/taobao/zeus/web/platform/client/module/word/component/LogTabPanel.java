@@ -23,7 +23,7 @@ public class LogTabPanel extends TabPanel {
 	
 	public LogTabPanel(){
 		final MessageBox box = new MessageBox(
-				"取消调试么?", "此次调试正在运行，要取消本次调试么？");
+				"Terminate debug?", "Debug process is working, terminate it?");
 		box.setPredefinedButtons(
 				PredefinedButton.YES,
 				PredefinedButton.NO,
@@ -47,7 +47,7 @@ public class LogTabPanel extends TabPanel {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							Window.alert("调试取消失败");
+							Window.alert("Failed to terminate the job");
 						}
 					});
 				}else if(choice.equalsIgnoreCase("no")){

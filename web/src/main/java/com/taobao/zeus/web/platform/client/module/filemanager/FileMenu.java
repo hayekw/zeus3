@@ -97,7 +97,7 @@ public class FileMenu implements IsWidget {
 
   private MenuItem getCollapseMenuItem() {
     if (collapseMenuItem == null) {
-      collapseMenuItem = new MenuItem("收缩", getCollapseSelectionHandler());
+      collapseMenuItem = new MenuItem("Collapse", getCollapseSelectionHandler());
       collapseMenuItem.setIcon(Images.getImageResources().arrow_in());
     }
     return collapseMenuItem;
@@ -117,7 +117,7 @@ public class FileMenu implements IsWidget {
 
   private MenuItem getCreateShellMenuItem() {
     if (createShellMenuItem == null) {
-    	createShellMenuItem = new MenuItem("新建shell", getCreateSelectionHandler());
+    	createShellMenuItem = new MenuItem("Create new shell", getCreateSelectionHandler());
     	createShellMenuItem.setIcon(Images.getImageResources().script_add());
     	createShellMenuItem.setData(FILE_TYPE, false);
     	createShellMenuItem.setData(FILE_SUFFIX, "sh");
@@ -127,7 +127,7 @@ public class FileMenu implements IsWidget {
 
   private MenuItem getCreateHiveMenuItem() {
     if (createHiveMenuItem == null) {
-    	createHiveMenuItem = new MenuItem("新建Hive", getCreateSelectionHandler());
+    	createHiveMenuItem = new MenuItem("Create new hive", getCreateSelectionHandler());
     	createHiveMenuItem.setIcon(Images.getImageResources().script_add());
     	createHiveMenuItem.setData(FILE_TYPE, false);
     	createHiveMenuItem.setData(FILE_SUFFIX, "hive");
@@ -136,7 +136,7 @@ public class FileMenu implements IsWidget {
   }
   private MenuItem getCreateTextMenuItem() {
 		if(createTextMenuItem==null){
-			createTextMenuItem=new MenuItem("新建文件",getCreateSelectionHandler());
+			createTextMenuItem=new MenuItem("Create new file",getCreateSelectionHandler());
 			createTextMenuItem.setIcon(Images.getImageResources().page_white_add());
 			createTextMenuItem.setData(FILE_TYPE, false);
 			createTextMenuItem.setData(FILE_SUFFIX, "");
@@ -145,7 +145,7 @@ public class FileMenu implements IsWidget {
 	}
   private MenuItem getCreateFolderMenuItem() {
     if (createFolderMenuItem == null) {
-      createFolderMenuItem = new MenuItem("新建文件夹", getCreateSelectionHandler());
+      createFolderMenuItem = new MenuItem("Create new directory", getCreateSelectionHandler());
       createFolderMenuItem.setIcon(Images.getImageResources().folder_add());
       createFolderMenuItem.setData(FILE_TYPE, true);
       createFolderMenuItem.setData(FILE_SUFFIX, "");
@@ -171,7 +171,7 @@ public class FileMenu implements IsWidget {
 
   private MenuItem getDeleteMenuItem() {
     if (deleteMenuItem == null) {
-      deleteMenuItem = new MenuItem("删除", getDeleteSelectionHandler());
+      deleteMenuItem = new MenuItem("Delete", getDeleteSelectionHandler());
       deleteMenuItem.setIcon(Images.getImageResources().cross());
     }
     return deleteMenuItem;
@@ -191,7 +191,7 @@ public class FileMenu implements IsWidget {
 
   private MenuItem getEditNameMenuItem() {
     if (editNameMenuItem == null) {
-      editNameMenuItem = new MenuItem("重命名", getEditNameSelectionHandler());
+      editNameMenuItem = new MenuItem("Rename", getEditNameSelectionHandler());
       editNameMenuItem.setIcon(Images.getImageResources().textfield_rename());
     }
     return editNameMenuItem;
@@ -211,7 +211,7 @@ public class FileMenu implements IsWidget {
 
   private MenuItem getExpandMenuItem() {
     if (expandMenuItem == null) {
-      expandMenuItem = new MenuItem("展开", getExpandSelectionHandler());
+      expandMenuItem = new MenuItem("Expand", getExpandSelectionHandler());
       expandMenuItem.setIcon(Images.getImageResources().arrow_out());
     }
     return expandMenuItem;
@@ -231,7 +231,7 @@ public class FileMenu implements IsWidget {
 
   private MenuItem getOpenMenuItem() {
     if (openMenuItem == null) {
-      openMenuItem = new MenuItem("打开", getOpenSelectionHandler());
+      openMenuItem = new MenuItem("Open", getOpenSelectionHandler());
       openMenuItem.setIcon(Images.getImageResources().bullet_go());
     }
     return openMenuItem;

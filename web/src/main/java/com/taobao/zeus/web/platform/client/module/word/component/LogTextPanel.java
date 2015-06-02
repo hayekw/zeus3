@@ -45,11 +45,11 @@ public class LogTextPanel extends ContentPanel{
 		
 		setContextMenu(contextMenu);
 				
-		stop = new MenuItem("停止运行", new SelectionHandler<MenuItem>() {
+		stop = new MenuItem("Stop running", new SelectionHandler<MenuItem>() {
 			
 			@Override
 			public void onSelection(final SelectionEvent<MenuItem> se) {
-				final MessageBox box = new MessageBox("停止调试？", "确定要停止调试么？");
+				final MessageBox box = new MessageBox("Terminate the debug？", "Are you sure to terminate the job？");
 				box.setPredefinedButtons(
 						PredefinedButton.YES,
 						PredefinedButton.NO);
@@ -70,7 +70,7 @@ public class LogTextPanel extends ContentPanel{
 								
 								@Override
 								public void onFailure(Throwable caught) {
-											Window.alert("取消调试失败！\n原因："
+											Window.alert("Failed to terminate the job!\n\n Rea                             ："
 													+ caught);
 								}
 							});

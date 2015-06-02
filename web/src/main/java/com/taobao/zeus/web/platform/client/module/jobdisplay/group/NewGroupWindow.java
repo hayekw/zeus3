@@ -32,7 +32,7 @@ public class NewGroupWindow extends Window{
 
 	public NewGroupWindow(GroupPresenter presenter) {
 		this.presenter=presenter;
-		setHeadingText("新建组");
+		setHeadingText("Create new group");
 		setWidth(350);
 		setHeight(150);
 		setModal(true);
@@ -41,14 +41,14 @@ public class NewGroupWindow extends Window{
 		VerticalLayoutContainer p = new VerticalLayoutContainer();
 		panel.add(p,new MarginData(5));
 		name = new TextField();
-		name.setToolTipConfig(new ToolTipConfig("组名称", "必填，可修改"){{setDismissDelay(0);}});
+		name.setToolTipConfig(new ToolTipConfig("Group name", "Mandatory, editable"){{setDismissDelay(0);}});
 
 		dir = new Radio();
-		dir.setBoxLabel("大目录");
-		dir.setToolTipConfig(new ToolTipConfig("大目录，不可修改", "该类型的组下面只能添加目录，不能添加Job任务"){{setDismissDelay(0);}});
+		dir.setBoxLabel("Group dir");
+		dir.setToolTipConfig(new ToolTipConfig("Group dir, non-editable", "Only groups can be added, jobs can not"){{setDismissDelay(0);}});
 		leaf = new Radio();
-		leaf.setBoxLabel("小目录");
-		leaf.setToolTipConfig(new ToolTipConfig("小目录，不可修改", "该类型的组下只能添加Job任务，不能添加目录"){{setDismissDelay(0);}});
+		leaf.setBoxLabel("Group");
+		leaf.setToolTipConfig(new ToolTipConfig("Group, non-editable", "Only jobs can be added, groups can not"){{setDismissDelay(0);}});
 		HorizontalPanel radios=new HorizontalPanel();
 		radios.add(dir);
 		radios.add(leaf);
@@ -56,23 +56,23 @@ public class NewGroupWindow extends Window{
 		group.add(dir);
 		group.add(leaf);
 		
-		p.add(new FieldLabel(name, "组名称(*)"), new VerticalLayoutData(1, -1));
-		p.add(new FieldLabel(radios,"组类型(*)"), new VerticalLayoutData(1, -1));
+		p.add(new FieldLabel(name, "Group name(*)"), new VerticalLayoutData(1, -1));
+		p.add(new FieldLabel(radios,"Group type(*)"), new VerticalLayoutData(1, -1));
 
 		add(panel,new MarginData(5));
 
-		addButton(new TextButton("确定", new SelectHandler() {
+		addButton(new TextButton("Ok", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				if (name.getValue()==null || name.getValue().trim().equals("")
 						|| group.getValue() == null) {
-					AlertMessageBox alert=new AlertMessageBox("警告", "必填项不能为空");
+					AlertMessageBox alert=new AlertMessageBox("Warning", "Required items can not be emtpy");
 					alert.show();
 				}else{
 					submit();
 				}
 			}
 		}));
-		addButton(new TextButton("取消", new SelectHandler() {
+		addButton(new TextButton("Cancel", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				NewGroupWindow.this.hide();
 			}
@@ -87,7 +87,7 @@ public class NewGroupWindow extends Window{
 			@Override
 			public void onSuccess(String groupId) {
 				NewGroupWindow.this.hide();
-				Info.display("操作成功", "新建组成功");
+				Info.display("Scuceeded", "New group was created successfully");
 				TreeNodeChangeEvent event=new TreeNodeChangeEvent();
 				event.setNeedSelectProviderKey(TreeKeyProviderTool.genGroupProviderKey(groupId));
 				presenter.getPlatformContext().getPlatformBus().fireEvent(event);

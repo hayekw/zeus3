@@ -49,7 +49,7 @@ public class QuickHadoopConfig extends Window{
 				return result;
 			}
 		});
-		addButton(new TextButton("保存", new SelectHandler() {
+		addButton(new TextButton("Save", new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				if(area.validate()){
 					Map<String, String> conf=FormatUtil.parseProperties(area.getValue());

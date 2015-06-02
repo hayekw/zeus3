@@ -9,10 +9,11 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.taobao.zeus.model.ZeusFollow;
 import com.taobao.zeus.store.FollowManager;
@@ -22,15 +23,22 @@ import com.taobao.zeus.store.JobBean;
 import com.taobao.zeus.store.mysql.persistence.ZeusFollowPersistence;
 import com.taobao.zeus.store.mysql.persistence.ZeusUser;
 import com.taobao.zeus.store.mysql.tool.PersistenceAndBeanConvert;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+@Repository(value = "followManager")
+@Transactional
 @SuppressWarnings("unchecked")
 public class MysqlFollowManager extends HibernateDaoSupport implements FollowManager{
+	@Autowired
+	public MysqlFollowManager(SessionFactory sessionFactory) {
+		super.setSessionFactory(sessionFactory);
+	}
 
-	
 	@Override
 	public List<ZeusFollow> findAllTypeFollows(final String uid) {
 		List<ZeusFollowPersistence> list= (List<ZeusFollowPersistence>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.ZeusFollowPersistence where uid=?");
 				query.setParameter(0, uid);
 				return query.list();
@@ -51,8 +59,7 @@ public class MysqlFollowManager extends HibernateDaoSupport implements FollowMan
 		List<ZeusFollowPersistence> list=  (List<ZeusFollowPersistence>) getHibernateTemplate().execute(new HibernateCallback() {
 			
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.ZeusFollowPersistence where type="+ZeusFollow.GroupType+" uid=?");
 				query.setParameter(0, uid);
 				return query.list();
@@ -72,8 +79,7 @@ public class MysqlFollowManager extends HibernateDaoSupport implements FollowMan
 		List<ZeusFollowPersistence> list=  (List<ZeusFollowPersistence>) getHibernateTemplate().execute(new HibernateCallback() {
 			
 			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.ZeusFollowPersistence where type="+ZeusFollow.JobType+" and uid=?");
 				query.setParameter(0, uid);
 				return query.list();
@@ -91,8 +97,7 @@ public class MysqlFollowManager extends HibernateDaoSupport implements FollowMan
 	@Override
 	public List<ZeusFollow> findJobFollowers(final String jobId) {
 		List<ZeusFollowPersistence> list=  (List<ZeusFollowPersistence>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.ZeusFollowPersistence where type="+ZeusFollow.JobType+" and targetId=?");
 				query.setParameter(0, Long.valueOf(jobId));
 				return query.list();
@@ -110,8 +115,7 @@ public class MysqlFollowManager extends HibernateDaoSupport implements FollowMan
 	@Override
 	public List<ZeusFollow> findGroupFollowers(final List<String> groupIds) {
 		List<ZeusFollowPersistence> list= (List<ZeusFollowPersistence>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException{
 				if(groupIds.isEmpty()){
 					return Collections.emptyList();
 				}
@@ -136,8 +140,7 @@ public class MysqlFollowManager extends HibernateDaoSupport implements FollowMan
 	@Override
 	public ZeusFollow addFollow(final String uid, final Integer type, final String targetId) {
 		List<ZeusFollowPersistence> list=(List<ZeusFollowPersistence>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.ZeusFollowPersistence where uid=? and type=? and targetId=?");
 				query.setParameter(0, uid);
 				query.setParameter(1, type);
@@ -163,8 +166,7 @@ public class MysqlFollowManager extends HibernateDaoSupport implements FollowMan
 	@Override
 	public void deleteFollow(final String uid, final Integer type, final String targetId) {
 		List<ZeusFollowPersistence> list=(List<ZeusFollowPersistence>) getHibernateTemplate().execute(new HibernateCallback() {
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.ZeusFollowPersistence where uid=? and type=? and targetId=?");
 				query.setParameter(0, uid);
 				query.setParameter(1, type);

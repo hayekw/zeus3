@@ -46,29 +46,29 @@ import com.taobao.zeus.web.platform.client.util.async.AbstractAsyncCallback;
 
 public class CardInfo extends CenterTemplate implements Refreshable<JobModel>{
 
-	private TextButton history=new TextButton("运行日志",new SelectHandler() {
+	private TextButton history=new TextButton("Running logs",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			presenter.displayHistory();
 		}
 	});
 	
-	private TextButton depGraph=new TextButton("依赖图",new SelectHandler() {
+	private TextButton depGraph=new TextButton("Dependency graph",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			presenter.displayDepGraph();
 		}
 	});
-	private TextButton editGroup=new TextButton("编辑",new SelectHandler() {
+	private TextButton editGroup=new TextButton("Edit",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			presenter.displayEditJob();
 		}
 	});
-	private TextButton deleteGroup=new TextButton("删除",new SelectHandler() {
+	private TextButton deleteGroup=new TextButton("Delete",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
-			ConfirmMessageBox box=new ConfirmMessageBox("删除任务", "你确认删除此任务?");
+			ConfirmMessageBox box=new ConfirmMessageBox("Delete job", "Are you sure to delete this job?");
 			box.addHideHandler(new HideHandler() {
 				@Override
 				public void onHide(HideEvent event) {
@@ -88,35 +88,35 @@ public class CardInfo extends CenterTemplate implements Refreshable<JobModel>{
 			box.show();
 		}
 	});
-	private TextButton configAdmin=new TextButton("配置管理员",new SelectHandler() {
+	private TextButton configAdmin=new TextButton("Configuration admin",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			new AdminConfigWindow(presenter).show();
 		}
 	});
-	private TextButton execute=new TextButton("手动执行",new SelectHandler() {
+	private TextButton execute=new TextButton("Manually execute",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
-			ConfirmMessageBox box=new ConfirmMessageBox("执行任务", "你确认手动执行该任务吗?");
+			ConfirmMessageBox box=new ConfirmMessageBox("Execute job", "Are you sure to execute this job manually?");
 			box.addHideHandler(new HideHandler() {
 				@Override
 				public void onHide(HideEvent event) {
 					Dialog btn=(Dialog)event.getSource();
 					if(btn.getHideButton().getText().equalsIgnoreCase("yes")){
-						final AutoProgressMessageBox wait=new AutoProgressMessageBox("运行中","doing");
+						final AutoProgressMessageBox wait=new AutoProgressMessageBox("Running","doing");
 						wait.auto();
 						wait.show();
 						RPCS.getJobService().run(presenter.getJobModel().getId(), 1, new AbstractAsyncCallback<Void>() {
 							@Override
 							public void onSuccess(Void result) {
 								wait.hide();
-								Info.display("成功", "手动执行任务开始");
+								Info.display("Succeeded", "Started to execute the job manually");
 								
 							}
 							@Override
 							public void onFailure(Throwable caught) {
 								wait.hide();
-								AlertMessageBox alert=new AlertMessageBox("失败", "手动执行任务失败");
+								AlertMessageBox alert=new AlertMessageBox("Failed", "Failed to execute the job manually");
 								alert.show();
 							};
 						});
@@ -126,28 +126,28 @@ public class CardInfo extends CenterTemplate implements Refreshable<JobModel>{
 			box.show();
 		}
 	});
-	private TextButton recover=new TextButton("手动恢复",new SelectHandler() {
+	private TextButton recover=new TextButton("Manually recover",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
-			ConfirmMessageBox box=new ConfirmMessageBox("恢复任务", "你确认恢复该任务吗?这将引起依赖任务的连锁反应!");
+			ConfirmMessageBox box=new ConfirmMessageBox("Recover job", "Are you sure to restore the job? It will cause unexpected result for depending jobs!");
 			box.addHideHandler(new HideHandler() {
 				@Override
 				public void onHide(HideEvent event) {
 					Dialog btn=(Dialog)event.getSource();
 					if(btn.getHideButton().getText().equalsIgnoreCase("yes")){
-						final AutoProgressMessageBox wait=new AutoProgressMessageBox("运行中","doing");
+						final AutoProgressMessageBox wait=new AutoProgressMessageBox("Running","doing");
 						wait.auto();
 						wait.show();
 						RPCS.getJobService().run(presenter.getJobModel().getId(), 2, new AbstractAsyncCallback<Void>() {
 							@Override
 							public void onSuccess(Void result) {
 								wait.hide();
-								Info.display("成功", "手动恢复任务开始");
+								Info.display("Succeeded", "Started to recover the job manually");
 							}
 							@Override
 							public void onFailure(Throwable caught) {
 								wait.hide();
-								AlertMessageBox alert=new AlertMessageBox("失败", "手动恢复任务失败");
+								AlertMessageBox alert=new AlertMessageBox("Failed", "Failed to recover the job manually");
 								alert.show();
 							};
 						});
@@ -157,7 +157,7 @@ public class CardInfo extends CenterTemplate implements Refreshable<JobModel>{
 			box.show();
 		}
 	});
-	private TextButton onoff=new TextButton("开启/关闭",new SelectHandler() {
+	private TextButton onoff=new TextButton("Enable/Disable",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			Boolean auto=presenter.getJobModel().getAuto();

@@ -67,38 +67,38 @@ public class CardOverall extends CenterTemplate implements Refreshable<GroupMode
 		this.presenter=p;
 		
 		ColumnConfig<JobModel,String> jobId=new ColumnConfig<JobModel,String>(prop.id(), 20,"JobId");
-		ColumnConfig<JobModel,String> jobName=new ColumnConfig<JobModel,String>(prop.name(),100, "任务名称");
+		ColumnConfig<JobModel,String> jobName=new ColumnConfig<JobModel,String>(prop.name(),100, "Job name");
 		jobName.setCell(new AbstractCell<String>(){
 			public void render(Context context,
 					String value, SafeHtmlBuilder sb) {
 				sb.appendHtmlConstant("<span title='"+value+"'>"+value+"</span>");
 			}
 		});
-		ColumnConfig<JobModel,String> status=new ColumnConfig<JobModel,String>(prop.status(), 30,"执行状态");
-		ColumnConfig<JobModel,String> lastStatus=new ColumnConfig<JobModel,String>(prop.lastStatus(),80, "上一次任务情况");
+		ColumnConfig<JobModel,String> status=new ColumnConfig<JobModel,String>(prop.status(), 30,"Status");
+		ColumnConfig<JobModel,String> lastStatus=new ColumnConfig<JobModel,String>(prop.lastStatus(),80, "Last status");
 		lastStatus.setCell(new AbstractCell<String>() {
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					String value, SafeHtmlBuilder sb) {
 				sb.appendHtmlConstant("<span title='"+value+"'>"+value+"</span>");
 			}
 		});
-		ColumnConfig<JobModel,Map<String, String>> readyDependency=new ColumnConfig<JobModel,Map<String, String>>(prop.readyDependencies(), 100,"依赖状态");
+		ColumnConfig<JobModel,Map<String, String>> readyDependency=new ColumnConfig<JobModel,Map<String, String>>(prop.readyDependencies(), 100,"Depending information");
 		readyDependency.setCell(new AbstractCell<Map<String, String>>() {
-			private DateTimeFormat format=DateTimeFormat.getFormat("MM月dd日 HH:mm");
+			private DateTimeFormat format=DateTimeFormat.getFormat("MM-dd HH:mm");
 			public void render(com.google.gwt.cell.client.Cell.Context context,
 					Map<String, String> value, SafeHtmlBuilder sb) {
 				if(value!=null && !value.isEmpty()){
 					for(String key:value.keySet()){
 						String time=value.get(key);
 						if(time==null){
-							sb.appendHtmlConstant("<span style='color:red'>依赖任务"+key+"未执行</span>").appendHtmlConstant("<br/>");
+							sb.appendHtmlConstant("<span style='color:red'>Depending job "+key+" not running</span>").appendHtmlConstant("<br/>");
 						}else{
-							sb.appendHtmlConstant("依赖任务"+key+"运行时间").appendHtmlConstant(":")
+							sb.appendHtmlConstant("Depending job "+key+" running time").appendHtmlConstant(":")
 							.appendHtmlConstant(format.format(new Date(Long.valueOf(time)))).appendHtmlConstant("<br/>");
 						}
 					}
 				}else{
-					sb.appendHtmlConstant("独立任务");
+					sb.appendHtmlConstant("Independent job");
 				}
 			}
 		});
@@ -156,19 +156,19 @@ public class CardOverall extends CenterTemplate implements Refreshable<GroupMode
 
 		setCenter(con);
 		
-		addButton(new TextButton("返回",new SelectHandler() {
+		addButton(new TextButton("Cancel",new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				presenter.display(presenter.getGroupModel());
 			}
 		}));
 		
-		addButton(new TextButton("自动任务",new SelectHandler() {
+		addButton(new TextButton("Automatic job",new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				presenter.displayRunning();
 			}
 		}));
 		
-		addButton(new TextButton("手动任务",new SelectHandler() {
+		addButton(new TextButton("Manual job",new SelectHandler() {
 			public void onSelect(SelectEvent event) {
 				presenter.displayManual();
 			}

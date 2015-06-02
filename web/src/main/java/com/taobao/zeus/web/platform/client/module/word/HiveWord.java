@@ -19,11 +19,11 @@ public class HiveWord extends Word {
 		this.model = fmodel;
 
 		if (fmodel.isAdmin() || context.getUser().isSuper()) {
-			add(getEditTab(), new TabItemConfig("编辑", false));
-			add(getHistoryTab(), new TabItemConfig("调试历史", false));
+			add(getEditTab(), new TabItemConfig("Edit", false));
+			add(getHistoryTab(), new TabItemConfig("Debug history", false));
 			setActiveWidget(editTab);
 		} else {
-			add(getViewTab(), new TabItemConfig("查看", false));
+			add(getViewTab(), new TabItemConfig("View", false));
 		}
 		addBeforeSelectionHandler(new BeforeSelectionHandler<Widget>() {
 			@Override

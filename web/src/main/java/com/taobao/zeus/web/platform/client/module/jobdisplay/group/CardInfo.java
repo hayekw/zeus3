@@ -27,42 +27,42 @@ import com.taobao.zeus.web.platform.client.util.async.AbstractAsyncCallback;
 
 public class CardInfo extends CenterTemplate implements Refreshable<GroupModel>{
 
-	private TextButton overall=new TextButton("任务总览",new SelectHandler() {
+	private TextButton overall=new TextButton("Job summary",new SelectHandler() {
 		public void onSelect(SelectEvent event) {
 			presenter.displayOverall();
 		}
 	});
 	
-	private TextButton running=new TextButton("自动任务",new SelectHandler() {
+	private TextButton running=new TextButton("Automatic jobs",new SelectHandler() {
 		public void onSelect(SelectEvent event) {
 			presenter.displayRunning();
 		}
 	});
-	private TextButton manual=new TextButton("手动任务",new SelectHandler() {
+	private TextButton manual=new TextButton("Manual jobs",new SelectHandler() {
 		public void onSelect(SelectEvent event) {
 			presenter.displayManual();
 		}
 	});
 	
-	private TextButton addGroup=new TextButton("添加组",new SelectHandler() {
+	private TextButton addGroup=new TextButton("Add group",new SelectHandler() {
 		@Override
 		public void onSelect(SelectEvent event) {
 			new NewGroupWindow(presenter).show();
 		}
 	});
-	private TextButton addJob=new TextButton("添加任务",new SelectHandler() {
+	private TextButton addJob=new TextButton("Add job",new SelectHandler() {
 		public void onSelect(SelectEvent event) {
 			new NewJobWindow(presenter.getPlatformContext().getPlatformBus(),presenter.getGroupModel()).show();
 		}
 	});
-	private TextButton editGroup=new TextButton("编辑",new SelectHandler() {
+	private TextButton editGroup=new TextButton("Edit",new SelectHandler() {
 		public void onSelect(SelectEvent event) {
 			presenter.displayEditGroup();
 		}
 	});
-	private TextButton deleteGroup=new TextButton("删除",new SelectHandler() {
+	private TextButton deleteGroup=new TextButton("Delete",new SelectHandler() {
 		public void onSelect(SelectEvent event) {
-			ConfirmMessageBox box=new ConfirmMessageBox("删除组", "你确认删除此组?");
+			ConfirmMessageBox box=new ConfirmMessageBox("Delete group", "Are you sure to delete this group?");
 			box.addHideHandler(new HideHandler() {
 				public void onHide(HideEvent event) {
 					Dialog btn = (Dialog) event.getSource();
@@ -80,7 +80,7 @@ public class CardInfo extends CenterTemplate implements Refreshable<GroupModel>{
 			box.show();
 		}
 	});
-	private TextButton configAdmin=new TextButton("配置管理员",new SelectHandler() {
+	private TextButton configAdmin=new TextButton("Administrator",new SelectHandler() {
 		public void onSelect(SelectEvent event) {
 			new AdminConfigWindow(presenter).show();
 		}
@@ -218,7 +218,7 @@ public class CardInfo extends CenterTemplate implements Refreshable<GroupModel>{
 	public FieldSet getBaseFieldSet() {
 		if(baseFieldSet==null){
 			baseFieldSet=new FieldSet();
-			baseFieldSet.setHeadingText("基本信息");
+			baseFieldSet.setHeadingText("Basic information");
 			
 			VerticalLayoutContainer p = new VerticalLayoutContainer();
 			
@@ -230,11 +230,11 @@ public class CardInfo extends CenterTemplate implements Refreshable<GroupModel>{
 			baseAdmins=new Label();
 			
 			p.add(new FieldLabel(baseId, "id"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-			p.add(new FieldLabel(baseName,"名称"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-			p.add(new FieldLabel(baseOwner,"所有人"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-			p.add(new FieldLabel(baseDesc,"描述"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-			p.add(new FieldLabel(baseFollers,"关注人员"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-			p.add(new FieldLabel(baseAdmins,"管理员"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+			p.add(new FieldLabel(baseName,"Name"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+			p.add(new FieldLabel(baseOwner,"Owner"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+			p.add(new FieldLabel(baseDesc,"Description"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+			p.add(new FieldLabel(baseFollers,"Watchers"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+			p.add(new FieldLabel(baseAdmins,"Administrator"),new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 			baseFieldSet.add(p);
 		}
 		return baseFieldSet;
@@ -243,7 +243,7 @@ public class CardInfo extends CenterTemplate implements Refreshable<GroupModel>{
 	public FieldSet getConfigParentField() {
 		if(configParentField==null){
 			configParentField=new FieldSet();
-			configParentField.setHeadingText("继承的配置项信息");
+			configParentField.setHeadingText("Inherited configuration item information");
 			configParentField.setCollapsible(true);
 			
 			configParentContent=new HTMLPanel("");
@@ -255,7 +255,7 @@ public class CardInfo extends CenterTemplate implements Refreshable<GroupModel>{
 	public FieldSet getResourceField() {
 		if(resourceField==null){
 			resourceField=new FieldSet();
-			resourceField.setHeadingText("资源信息");
+			resourceField.setHeadingText("Resource information");
 			resourceContent=new HTMLPanel("");
 			resourceField.add(resourceContent);
 		}
@@ -265,7 +265,7 @@ public class CardInfo extends CenterTemplate implements Refreshable<GroupModel>{
 	public FieldSet getResourceParentField() {
 		if(resourceParentField==null){
 			resourceParentField=new FieldSet();
-			resourceParentField.setHeadingText("继承的资源信息");
+			resourceParentField.setHeadingText("Inherited resource information");
 			resourceParentContent=new HTMLPanel("");
 			resourceParentField.add(resourceParentContent);
 		}
@@ -275,7 +275,7 @@ public class CardInfo extends CenterTemplate implements Refreshable<GroupModel>{
 	public FieldSet getConfigFieldSet() {
 		if(configFieldSet==null){
 			configFieldSet=new FieldSet();
-			configFieldSet.setHeadingText("配置项信息");
+			configFieldSet.setHeadingText("Configuration item information");
 			
 			configContent=new HTMLPanel("");
 			configFieldSet.add(configContent);

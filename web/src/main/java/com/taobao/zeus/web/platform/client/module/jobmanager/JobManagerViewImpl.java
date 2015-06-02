@@ -37,7 +37,7 @@ public class JobManagerViewImpl implements JobManagerView{
 					getTree().getSelectionModel().deselectAll();
 				};
 			};
-			myTreePanel.setHeadingText("我的调度任务");
+			myTreePanel.setHeadingText("My jobs");
 		}
 		return myTreePanel;
 	}
@@ -50,7 +50,7 @@ public class JobManagerViewImpl implements JobManagerView{
 					getTree().getSelectionModel().deselectAll();
 				};
 			};
-			allTreePanel.setHeadingText("所有的调度任务");
+			allTreePanel.setHeadingText("All jobs");
 		}
 		return allTreePanel;
 	}

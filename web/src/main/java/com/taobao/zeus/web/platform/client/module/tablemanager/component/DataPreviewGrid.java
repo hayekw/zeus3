@@ -44,7 +44,7 @@ public class DataPreviewGrid implements IsWidget {
 		grid.setAllowTextSelection(true);
 
 		grid.getView().setAdjustForHScroll(false);
-		grid.getView().setEmptyText("没有数据！");
+		grid.getView().setEmptyText("No result found");
 	}
 
 	private class MyValueProvider implements

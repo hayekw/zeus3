@@ -17,8 +17,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.taobao.zeus.schedule.mvc.ScheduleInfoLog;
 import com.taobao.zeus.socket.worker.ClientWorker;
@@ -63,18 +63,18 @@ public class DistributeLocker extends HibernateDaoSupport{
 	
 	public void init() throws Exception{
 		zeusSchedule=new ZeusSchedule(applicationContext);
-		ScheduledExecutorService service=Executors.newScheduledThreadPool(3);
-		service.scheduleAtFixedRate(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					update();
-				} catch (Exception e) {
-					log.error(e);
-				}
-			}
-		}, 20, 60, TimeUnit.SECONDS);
+//		ScheduledExecutorService service=Executors.newScheduledThreadPool(3);
+//		service.scheduleAtFixedRate(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				try {
+//					update();
+//				} catch (Exception e) {
+//					log.error(e);
+//				}
+//			}
+//		}, 20, 60, TimeUnit.SECONDS);
 	}
 	/**
 	 * 定时扫描任务
@@ -84,53 +84,54 @@ public class DistributeLocker extends HibernateDaoSupport{
 	 *
 	 */
 	private void update(){
-		DistributeLock lock=(DistributeLock) getHibernateTemplate().execute(new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
-				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.DistributeLock where subgroup=? order by id desc");
-				query.setParameter(0, Environment.getScheduleGroup());
-				query.setMaxResults(1);
-				DistributeLock lock= (DistributeLock) query.uniqueResult();
-				if(lock==null){
-					lock=new DistributeLock();
-					lock.setHost(host);
-					lock.setServerUpdate(new Date());
-					lock.setSubgroup(Environment.getScheduleGroup());
-					session.save(lock);
-					lock=(DistributeLock) query.uniqueResult();
-				}
-				return lock;
-			}
-		});
-		
-		if(host.equals(lock.getHost())){
-			log.info("hold the locker and update time");
-			lock.setServerUpdate(new Date());
-			getHibernateTemplate().update(lock);
-			
-			zeusSchedule.startup(port);
-		}else{//其他服务器抢占了锁
-			log.info("not my locker");
-			//如果最近更新时间在2分钟以上，则认为抢占的Master服务器已经失去连接，本服务器主动进行抢占
-			if(System.currentTimeMillis()-lock.getServerUpdate().getTime()>1000*60*2L){
-				log.error("rob the locker and update");
-				lock.setHost(host);
-				lock.setServerUpdate(new Date());
-				lock.setSubgroup(Environment.getScheduleGroup());
-				getHibernateTemplate().update(lock);
-				zeusSchedule.startup(port);
-			}else{//如果Master服务器没有问题，本服务器停止server角色
-				zeusSchedule.shutdown();
-			}
-			
-		}
-		
-		try {
-			worker.connect(lock.getHost(),port);
-		} catch (Exception e) {
-			ScheduleInfoLog.error("start up worker fail", e);
-		}
+//		DistributeLock lock=(DistributeLock) getHibernateTemplate().execute(new HibernateCallback() {
+//			@Override
+//			public Object doInHibernate(Session session) throws HibernateException {
+//				session.getTransaction().commit();
+//				Query query=session.createQuery("from com.taobao.zeus.store.mysql.persistence.DistributeLock where subgroup=? order by id desc");
+//				query.setParameter(0, Environment.getScheduleGroup());
+//				query.setMaxResults(1);
+//				DistributeLock lock= (DistributeLock) query.uniqueResult();
+//				if(lock==null){
+//					lock=new DistributeLock();
+//					lock.setHost(host);
+//					lock.setServerUpdate(new Date());
+//					lock.setSubgroup(Environment.getScheduleGroup());
+//					session.save(lock);
+//					lock=(DistributeLock) query.uniqueResult();
+//				}
+//				session.getTransaction().commit();
+//				return lock;
+//			}
+//		});
+//
+//		if(host.equals(lock.getHost())){
+//			log.info("hold the locker and update time");
+//			lock.setServerUpdate(new Date());
+//			getHibernateTemplate().update(lock);
+//
+//			zeusSchedule.startup(port);
+//		}else{//其他服务器抢占了锁
+//			log.info("not my locker");
+//			//如果最近更新时间在2分钟以上，则认为抢占的Master服务器已经失去连接，本服务器主动进行抢占
+//			if(System.currentTimeMillis()-lock.getServerUpdate().getTime()>1000*60*2L){
+//				log.error("rob the locker and update");
+//				lock.setHost(host);
+//				lock.setServerUpdate(new Date());
+//				lock.setSubgroup(Environment.getScheduleGroup());
+//				getHibernateTemplate().update(lock);
+//				zeusSchedule.startup(port);
+//			}else{//如果Master服务器没有问题，本服务器停止server角色
+//				zeusSchedule.shutdown();
+//			}
+//
+//		}
+//
+//		try {
+//			worker.connect(lock.getHost(),port);
+//		} catch (Exception e) {
+//			ScheduleInfoLog.error("start up worker fail", e);
+//		}
 	}
 	
 }
